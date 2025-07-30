@@ -8,18 +8,18 @@ import { ModalProvider } from './contexts/ModalContext'
 // 확장된 테마 정의
 const theme = {
    colors: {
-      primary: '#1A5A96', // 진한 파란색 (신뢰성, 전문성)
-      secondary: '#4A90E2', // 밝은 파란색 (활기, 기술)
-      accent: '#F5A623', // 주황색 (강조, 활력)
+      primary: '#E53E3E', // 변경: 진한 파란색 -> 중간 톤의 빨간색
+      secondary: '#C53030', // 변경: 밝은 파란색 -> 더 진한 빨간색
+      accent: '#F5A623', // 주황색 유지 (빨간색과 대비)
       background: '#FFFFFF', // 기본 배경
       backgroundLight: '#F8F9FA', // 약간 어두운 배경 (섹션 구분 등)
       text: '#343A40', // 기본 텍스트
       textSecondary: '#6C757D', // 보조 텍스트
       textLight: '#FFFFFF', // 밝은 텍스트 (버튼 등)
       border: '#DEE2E6', // 테두리 색상
-      success: '#28A745',
-      error: '#DC3545',
-      warning: '#FFC107',
+      success: '#28A745', // 초록색 유지
+      error: '#DC3545', // 기존 error 색상이 primary와 유사해질 수 있으므로 필요 시 조정 고려
+      warning: '#FFC107', // 노란색 유지
    },
    fonts: {
       body: `'Noto Sans KR', sans-serif`, // 본문 폰트 (가독성 좋은 한글 폰트)

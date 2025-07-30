@@ -235,9 +235,7 @@ export function HomePage() {
 
             {/* --- 통계 섹션 --- */}
             <StatsSection ref={statsRef} initial="hidden" animate={statsInView ? 'visible' : 'hidden'} variants={counterSectionVariants}>
-               <SectionTitle $centered style={{ color: 'white' }}>
-                  KHAMA 주요 성과
-               </SectionTitle>
+               <SectionTitle $centered>KHAMA 주요 성과</SectionTitle>
                <StatGrid>
                   <StatItem variants={statItemVariant}>
                      <StatValue>

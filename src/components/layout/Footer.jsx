@@ -37,9 +37,9 @@ export function Footer() {
             <FooterSection>
                <SectionTitle>Contact Us</SectionTitle>
                <ContactInfo>
-                  <p>주소: 서울특별시 강남구 테헤란로 123</p>
-                  <p>대표번호: 02-1234-5678</p>
-                  <p>이메일: contact@khama.or.kr</p>
+                  <p>주소: 인천 서구 청라한내로72번길 13 청라 큐브시그니처 2차 오피스텔 201호-206호</p>
+                  <p>대표번호: 1566-3321</p>
+                  <p>이메일: haan@hanallcompany.com</p>
                </ContactInfo>
                {/* <SocialLinks>
                   <SocialLink href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></SocialLink>

@@ -48,7 +48,7 @@ export function AssociationPage() {
                      <p>
                         한국생활가전유지관리협회
                         <br />
-                        (KHAMA)
+                        (Korea Household Appliances Maintenance Association)
                      </p>
                   </ValueItem>
                   <ValueItem variants={itemVariants}>

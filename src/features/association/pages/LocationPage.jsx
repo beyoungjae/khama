@@ -29,28 +29,28 @@ export function LocationPage() {
                         <Icon>📍</Icon>
                         <InfoText>
                            <strong>주소</strong>
-                           <p>서울특별시 강남구 테헤란로 123, KHAMA 타워 5층</p>
+                           <p>인천 서구 청라한내로72번길 13 청라 큐브시그니처 2차 오피스텔 201호-206호</p>
                         </InfoText>
                      </InfoItem>
                      <InfoItem>
                         <Icon>📞</Icon>
                         <InfoText>
                            <strong>대표번호</strong>
-                           <p>02-1234-5678</p>
+                           <p>1566-3321</p>
                         </InfoText>
                      </InfoItem>
                      <InfoItem>
                         <Icon>📠</Icon>
                         <InfoText>
                            <strong>팩스</strong>
-                           <p>02-1234-5679</p>
+                           <p>070-4727-8646</p>
                         </InfoText>
                      </InfoItem>
                      <InfoItem>
                         <Icon>📧</Icon>
                         <InfoText>
                            <strong>이메일</strong>
-                           <p>contact@khama.or.kr</p>
+                           <p>haan@hanallcompany.com</p>
                         </InfoText>
                      </InfoItem>
                   </InfoContainer>
@@ -61,20 +61,8 @@ export function LocationPage() {
                <SectionTitle>대중교통 이용 안내</SectionTitle>
                <TransportGrid>
                   <TransportItem>
-                     <h4>지하철</h4>
-                     <p>2호선 강남역 11번 출구 도보 5분</p>
-                     <p>신분당선 강남역 7번 출구 도보 7분</p>
-                  </TransportItem>
-                  <TransportItem>
-                     <h4>버스</h4>
-                     <p>간선버스: 140, 144, 402, 470</p>
-                     <p>지선버스: 4412, 4417</p>
-                     <p>광역버스: 9404, 9408</p>
-                     <p>(강남역 정류장 하차)</p>
-                  </TransportItem>
-                  <TransportItem>
                      <h4>주차안내</h4>
-                     <p>건물 내 지하주차장 이용 가능 (유료)</p>
+                     <p>건물 내 지하주차장 이용 가능 (무료)</p>
                      <p>방문 시 안내데스크에 문의 바랍니다.</p>
                   </TransportItem>
                </TransportGrid>

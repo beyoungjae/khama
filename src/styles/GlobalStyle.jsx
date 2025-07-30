@@ -18,6 +18,8 @@ export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 16px; /* 기본 폰트 크기 설정 (rem 단위 기준) */
     height: 100%;
+    scrollbar-width: thin; /* 'auto' 또는 'thin' */
+    scrollbar-color: ${({ theme }) => theme.colors.primary}B3 ${({ theme }) => theme.colors.backgroundLight}; /* thumb track */
   }
 
   body {
@@ -28,6 +30,27 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased; /* 폰트 안티앨리어싱 */
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
+
+    /* Webkit 기반 브라우저 스크롤바 스타일링 */
+    &::-webkit-scrollbar {
+      width: 8px; /* 스크롤바 너비 */
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: ${({ theme }) => theme.colors.backgroundLight}; /* 스크롤바 트랙 배경색 */
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.colors.primary}B3; /* 스크롤바 막대 색상 (primary + 투명도) */
+      border-radius: 10px;
+      border: 1px solid ${({ theme }) => theme.colors.backgroundLight}; /* 트랙과 약간의 경계 */
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: ${({ theme }) => theme.colors.primary}; /* 호버 시 더 진하게 */
+    }
   }
 
   #root {
