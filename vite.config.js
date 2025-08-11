@@ -18,4 +18,16 @@ export default defineConfig({
       port: 5173,
       allowedHosts: ['.ngrok-free.app'],
    },
+   build: {
+      rollupOptions: {
+         output: {
+            manualChunks: {
+               vendor: ['react', 'react-dom', 'react-router-dom'],
+               animations: ['framer-motion', 'react-intersection-observer'],
+               ui: ['styled-components', 'react-icons'],
+            },
+         },
+      },
+      chunkSizeWarningLimit: 1000,
+   },
 })

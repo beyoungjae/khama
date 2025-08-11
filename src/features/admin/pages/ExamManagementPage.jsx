@@ -1,7 +1,28 @@
+import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
+import { FaFileSignature, FaSearch, FaPlus, FaEye, FaEdit, FaTrash, FaClock, FaCheck, FaTimes, FaCalendarAlt } from 'react-icons/fa'
+import { useInView } from 'react-intersection-observer'
 import styled from 'styled-components'
-import { Input } from '@/components/common/Input'
-import { Button } from '@/components/common/Button'
-import { Select } from '@/components/common/Select'
+import {
+  fadeInUp,
+  fadeInScale,
+  staggerContainer,
+  slideInLeft,
+  slideInRight,
+  PageWrapper,
+  Container,
+  ModernHeroSection,
+  HeroBackground,
+  HeroContainer,
+  HeroBadge,
+  HeroTitle,
+  GradientText,
+  HeroSubtitle,
+  HeroDescription,
+  Section,
+  SectionHeader,
+  SectionTitle,
+  Card
+} from '../../../components/common/SharedStyles'
 
 // 목업 시험 데이터
 const mockExams = [
@@ -10,145 +31,290 @@ const mockExams = [
    { id: 'exam003', name: '생활가전 유지보수사 1급', date: '2024-07-20', session: '2회차', applicants: 80, status: '종료' },
 ]
 
-// 시험 상태 옵션
-const statusOptions = [
-   { value: 'all', label: '전체' },
-   { value: 'upcoming', label: '예정' },
-   { value: 'registering', label: '접수중' },
-   { value: 'closed', label: '종료' },
-]
-
 export function ExamManagementPage() {
+   // motion 컴포넌트 사용을 위한 필수 import 보장
+   const MotionDiv = motion.div
+   
+   const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
+   const { ref: contentRef, inView: contentInView } = useInView({ triggerOnce: true, threshold: 0.2 })
+   
    // TODO: 실제 데이터 로딩, 필터링, 페이지네이션, 시험 관리 로직
 
-   return (
-      <Container>
-         <Title>시험 관리</Title>
-         <FilterSection>
-            <Input placeholder="시험명 검색" style={{ flexGrow: 1 }} />
-            <Select options={statusOptions} placeholder="-- 상태 --" style={{ minWidth: '120px' }} />
-            <Button variant="primary">검색</Button>
-            {/* TODO: 시험 일정 추가 버튼 */}
-            <Button variant="secondary" style={{ marginLeft: 'auto' }}>
-               + 새 시험 일정 등록
-            </Button>
-         </FilterSection>
+   const getStatusIcon = (status) => {
+      switch (status) {
+         case '접수중': return FaCheck
+         case '예정': return FaClock
+         case '종료': return FaTimes
+         default: return FaClock
+      }
+   }
 
-         <ExamTable>
-            <colgroup>
-               <col style={{ width: '5%' }} />
-               <col style={{ width: 'auto' }} />
-               <col style={{ width: '15%' }} />
-               <col style={{ width: '10%' }} />
-               <col style={{ width: '10%' }} />
-               <col style={{ width: '10%' }} />
-               <col style={{ width: '15%' }} />
-            </colgroup>
-            <thead>
-               <tr>
-                  <Th>
-                     <input type="checkbox" />
-                  </Th>
-                  <Th>시험명</Th>
-                  <Th>시험일</Th>
-                  <Th>회차</Th>
-                  <Th>접수인원</Th>
-                  <Th>상태</Th>
-                  <Th>관리</Th>
-               </tr>
-            </thead>
-            <tbody>
-               {mockExams.map((exam) => (
-                  <tr key={exam.id}>
-                     <Td>
-                        <input type="checkbox" />
-                     </Td>
-                     <Td>{exam.name}</Td>
-                     <Td>{exam.date}</Td>
-                     <Td>{exam.session}</Td>
-                     <Td>{exam.applicants}</Td>
-                     <Td>
-                        <StatusBadge status={exam.status}>{exam.status}</StatusBadge>
-                     </Td>
-                     <Td>
-                        <ActionButton variant="ghost" size="small">
-                           상세
-                        </ActionButton>
-                        <ActionButton variant="ghost" size="small">
-                           수정
-                        </ActionButton>
-                        <ActionButton variant="ghost" size="small" color="error">
-                           삭제
-                        </ActionButton>
-                     </Td>
-                  </tr>
-               ))}
-            </tbody>
-         </ExamTable>
-         {/* TODO: Pagination */}
-      </Container>
+   return (
+      <PageWrapper>
+         <ModernHeroSection gradient="linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%)" ref={heroRef}>
+            <HeroBackground />
+            <HeroContainer>
+               <motion.div
+                  initial="hidden"
+                  animate={heroInView ? "visible" : "hidden"}
+                  variants={staggerContainer}
+               >
+                  <HeroBadge as={motion.div} variants={fadeInScale}>
+                     <FaFileSignature /> 시험 관리
+                  </HeroBadge>
+                  <HeroTitle as={motion.h1} variants={slideInLeft}>
+                     <GradientText>시험</GradientText> 관리
+                  </HeroTitle>
+                  <HeroSubtitle as={motion.p} variants={slideInRight}>
+                     "시험 일정과 접수 현황을 체계적으로 관리하세요"
+                  </HeroSubtitle>
+                  <HeroDescription as={motion.p} variants={slideInRight}>
+                     모든 시험 일정을 한눈에 확인하고 효율적으로 관리하세요
+                  </HeroDescription>
+               </motion.div>
+            </HeroContainer>
+         </ModernHeroSection>
+
+         <Container>
+            <Section ref={contentRef}>
+               <SectionHeader>
+                  <SectionTitle
+                     as={motion.h2}
+                     initial="hidden"
+                     animate={contentInView ? "visible" : "hidden"}
+                     variants={fadeInUp}
+                  >
+                     <FaCalendarAlt /> 시험 일정 관리
+                  </SectionTitle>
+               </SectionHeader>
+               
+               <FilterCard
+                  as={motion.div}
+                  initial="hidden"
+                  animate={contentInView ? "visible" : "hidden"}
+                  variants={fadeInUp}
+               >
+                  <FilterSection>
+                     <SearchInput placeholder="시험명 검색" />
+                     <FilterSelect>
+                        <option value="">전체 상태</option>
+                        <option value="upcoming">예정</option>
+                        <option value="registering">접수중</option>
+                        <option value="closed">종료</option>
+                     </FilterSelect>
+                     <FilterButton>
+                        <FaSearch /> 검색
+                     </FilterButton>
+                     <AddButton>
+                        <FaPlus /> 새 시험 일정 등록
+                     </AddButton>
+                  </FilterSection>
+               </FilterCard>
+
+               <ExamCard
+                  as={motion.div}
+                  initial="hidden"
+                  animate={contentInView ? "visible" : "hidden"}
+                  variants={staggerContainer}
+               >
+                  <TableWrapper as={motion.div} variants={fadeInUp}>
+                     <ExamTable>
+                        <thead>
+                           <tr>
+                              <th>
+                                 <CheckboxWrapper>
+                                    <input type="checkbox" />
+                                 </CheckboxWrapper>
+                              </th>
+                              <th>시험명</th>
+                              <th>시험일</th>
+                              <th>회차</th>
+                              <th>접수인원</th>
+                              <th>상태</th>
+                              <th>관리</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {mockExams.map((exam) => {
+                              const StatusIcon = getStatusIcon(exam.status)
+                              return (
+                                 <tr key={exam.id}>
+                                    <td>
+                                       <CheckboxWrapper>
+                                          <input type="checkbox" />
+                                       </CheckboxWrapper>
+                                    </td>
+                                    <td>{exam.name}</td>
+                                    <td>{exam.date}</td>
+                                    <td>{exam.session}</td>
+                                    <td>{exam.applicants}명</td>
+                                    <td>
+                                       <StatusBadge status={exam.status}>
+                                          <StatusIcon />
+                                          {exam.status}
+                                       </StatusBadge>
+                                    </td>
+                                    <td>
+                                       <ActionButtons>
+                                          <ActionButton><FaEye /></ActionButton>
+                                          <ActionButton><FaEdit /></ActionButton>
+                                          <ActionButton status="delete"><FaTrash /></ActionButton>
+                                       </ActionButtons>
+                                    </td>
+                                 </tr>
+                              )
+                           })}
+                        </tbody>
+                     </ExamTable>
+                  </TableWrapper>
+                  
+                  {mockExams.length === 0 && (
+                     <PlaceholderContent as={motion.div} variants={fadeInUp}>
+                        <FaFileSignature size={48} />
+                        <h3>등록된 시험이 없습니다</h3>
+                        <p>새로운 시험 일정을 등록해보세요.</p>
+                     </PlaceholderContent>
+                  )}
+               </ExamCard>
+            </Section>
+         </Container>
+      </PageWrapper>
    )
 }
 
-const Container = styled.div``
-const Title = styled.h1`
-   font-size: ${({ theme }) => theme.fontSizes.h3};
-   font-weight: 700;
-   margin-bottom: 1.5rem;
+// ExamManagementPage 전용 스타일 컴포넌트
+const FilterCard = styled(Card)`
+   padding: 1.5rem;
+   margin-bottom: 2rem;
 `
+
 const FilterSection = styled.div`
    display: flex;
    gap: 1rem;
    align-items: center;
-   margin-bottom: 1.5rem;
-   background-color: #fff;
-   padding: 1.5rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   border: 1px solid ${({ theme }) => theme.colors.border};
-
-   > div {
-      margin-bottom: 0;
+   flex-wrap: wrap;
+   
+   @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
    }
 `
+
+const SearchInput = styled.input`
+   flex: 1;
+   padding: 0.75rem 1rem;
+   border: 2px solid #e2e8f0;
+   border-radius: 12px;
+   font-size: 0.9rem;
+   transition: all 0.3s ease;
+   
+   &:focus {
+      outline: none;
+      border-color: #ff9a56;
+      box-shadow: 0 0 0 3px rgba(255, 154, 86, 0.1);
+   }
+   
+   &::placeholder {
+      color: #94a3b8;
+   }
+`
+
+const FilterSelect = styled.select`
+   padding: 0.75rem 1rem;
+   border: 2px solid #e2e8f0;
+   border-radius: 12px;
+   font-size: 0.9rem;
+   background: white;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   
+   &:focus {
+      outline: none;
+      border-color: #ff9a56;
+      box-shadow: 0 0 0 3px rgba(255, 154, 86, 0.1);
+   }
+`
+
+const FilterButton = styled.button`
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.75rem 1.5rem;
+   background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+   color: white;
+   border: none;
+   border-radius: 12px;
+   font-size: 0.9rem;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   
+   &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 154, 86, 0.3);
+   }
+`
+
+const AddButton = styled.button`
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.75rem 1.5rem;
+   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+   color: white;
+   border: none;
+   border-radius: 12px;
+   font-size: 0.9rem;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   margin-left: auto;
+   
+   &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+   }
+   
+   @media (max-width: 768px) {
+      margin-left: 0;
+   }
+`
+
+const ExamCard = styled(Card)`
+   padding: 0;
+   overflow: hidden;
+`
+
+const TableWrapper = styled.div`
+   overflow-x: auto;
+`
+
 const ExamTable = styled.table`
    width: 100%;
    border-collapse: collapse;
-   background-color: #fff;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   border: 1px solid ${({ theme }) => theme.colors.border};
-   overflow: hidden;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-   th,
-   td {
-      padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+   
+   th, td {
+      padding: 1rem 1.5rem;
       text-align: left;
-      vertical-align: middle;
-      border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+      border-bottom: 1px solid #e2e8f0;
    }
-
+   
    th {
-      background-color: ${({ theme }) => theme.colors.backgroundLight};
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       font-weight: 600;
-      color: ${({ theme }) => theme.colors.text};
+      color: #1e293b;
       font-size: 0.9rem;
    }
-
+   
    td {
       font-size: 0.9rem;
-      color: ${({ theme }) => theme.colors.textSecondary};
+      color: #64748b;
    }
-
-   tbody tr {
-      &:last-child td {
-         border-bottom: none;
-      }
-      &:hover {
-         background-color: ${({ theme }) => theme.colors.primary}10;
-      }
+   
+   tbody tr:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
    }
-
-   /* 체크박스, 회차, 인원, 상태, 관리 열 가운데 정렬 */
+   
    th:first-child,
    td:first-child,
    th:nth-child(4),
@@ -162,48 +328,88 @@ const ExamTable = styled.table`
       text-align: center;
    }
 `
-const Th = styled.th`
-   padding: 0.75rem;
-   text-align: left;
-   border-bottom: 1px solid #eee;
+
+const CheckboxWrapper = styled.div`
+   display: flex;
+   justify-content: center;
+   
+   input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+   }
 `
-const Td = styled.td`
-   padding: 0.75rem;
-   text-align: left;
-   border-bottom: 1px solid #eee;
-`
+
 const StatusBadge = styled.span`
-   padding: 0.25rem 0.6rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   font-size: 0.75rem;
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.5rem 1rem;
+   border-radius: 20px;
+   font-size: 0.8rem;
    font-weight: 600;
-   color: white;
-   text-transform: uppercase;
-   letter-spacing: 0.5px;
-   background-color: ${({ theme, status }) => {
+   background: ${({ status }) => {
       switch (status) {
-         case '접수중':
-            return theme.colors.success
-         case '예정':
-            return theme.colors.warning
-         case '종료':
-            return theme.colors.textSecondary
-         default:
-            return theme.colors.textSecondary
+         case '접수중': return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+         case '예정': return 'linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%)'
+         case '종료': return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+         default: return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
       }
    }};
+   color: white;
 `
-const ActionButton = styled(Button)`
-   padding: 0.2rem 0.4rem;
-   font-size: 0.8rem;
-   margin-right: 0.3rem;
-   color: ${({ theme, color }) => (color ? theme.colors[color] : theme.colors.textSecondary)};
 
+const ActionButtons = styled.div`
+   display: flex;
+   gap: 0.5rem;
+   justify-content: center;
+`
+
+const ActionButton = styled.button`
+   width: 32px;
+   height: 32px;
+   border: none;
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   font-size: 0.9rem;
+   
+   background: ${({ status }) => {
+      switch (status) {
+         case 'delete': return 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
+         default: return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+      }
+   }};
+   color: white;
+   
    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundLight};
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
    }
+`
 
-   &:last-child {
-      margin-right: 0;
+const PlaceholderContent = styled.div`
+   padding: 4rem 2rem;
+   text-align: center;
+   color: #94a3b8;
+   
+   svg {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+   }
+   
+   h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 0.5rem;
+   }
+   
+   p {
+      font-size: 0.95rem;
+      line-height: 1.5;
    }
 `

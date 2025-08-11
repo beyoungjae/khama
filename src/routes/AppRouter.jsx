@@ -14,6 +14,10 @@ import { ExamSubjectsPage } from '@/features/exam/pages/ExamSubjectsPage'
 import { ExamProgramsPage } from '@/features/exam/pages/ExamProgramsPage'
 import { ProductCertPage } from '@/features/certification/pages/ProductCertPage'
 import { ProductWelzonePage } from '@/features/certification/pages/ProductWelzonePage'
+import { ApplianceCleaningPage } from '@/features/certification/pages/ApplianceCleaningPage'
+import { AirConditionerServicePage } from '@/features/certification/pages/AirConditionerServicePage'
+import { AirConditionerInstallationPage } from '@/features/certification/pages/AirConditionerInstallationPage'
+import { VentilationSystemPage } from '@/features/certification/pages/VentilationSystemPage'
 import { NoticePage } from '@/features/inquiry/pages/NoticePage'
 import { NoticeDetailPage } from '@/features/inquiry/pages/NoticeDetailPage'
 import { QnaPage } from '@/features/inquiry/pages/QnaPage'
@@ -74,6 +78,12 @@ export function AppRouter() {
          <Route path="/exam-info/programs" element={<ExamProgramsPage />} />
          <Route path="/product-cert" element={<ProductCertPage />} />
          <Route path="/product-cert/welzone" element={<ProductWelzonePage />} />
+
+         {/* 자격증 상세 페이지 */}
+         <Route path="/certification/appliance-cleaning" element={<ApplianceCleaningPage />} />
+         <Route path="/certification/air-conditioner-service" element={<AirConditionerServicePage />} />
+         <Route path="/certification/air-conditioner-installation" element={<AirConditionerInstallationPage />} />
+         <Route path="/certification/ventilation-system" element={<VentilationSystemPage />} />
          <Route path="/apply" element={<ApplicationFormPage />} />
 
          {/* 온라인 신청 */}

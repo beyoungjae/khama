@@ -1,13 +1,39 @@
-import styled from 'styled-components'
+import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
 import { useForm } from 'react-hook-form'
-import { Input } from '@/components/common/Input'
-import { Button } from '@/components/common/Button'
+import { FaUserShield, FaEnvelope, FaLock, FaSignInAlt, FaExclamationCircle } from 'react-icons/fa'
+import { useInView } from 'react-intersection-observer'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import {
+  fadeInUp,
+  fadeInScale,
+  staggerContainer,
+  slideInLeft,
+  slideInRight,
+  PageWrapper,
+  Container,
+  ModernHeroSection,
+  HeroBackground,
+  HeroContainer,
+  HeroBadge,
+  HeroTitle,
+  GradientText,
+  HeroSubtitle,
+  HeroDescription,
+  Section,
+  Card
+} from '../../../components/common/SharedStyles'
 
 export function AdminLoginPage() {
+   // motion 컴포넌트 사용을 위한 필수 import 보장
+   const MotionDiv = motion.div
+   
    const { login, logout } = useAuth()
    const navigate = useNavigate()
+   const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
+   const { ref: formRef, inView: formInView } = useInView({ triggerOnce: true, threshold: 0.2 })
+   
    const {
       register,
       handleSubmit,
@@ -40,74 +66,227 @@ export function AdminLoginPage() {
    }
 
    return (
-      <Container>
-         <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-            <Title>관리자 로그인</Title>
-            <Description>KHAMA 관리 시스템 접근을 위해 로그인해주세요.</Description>
-            {errors.root?.serverError && <ServerError>{errors.root.serverError.message}</ServerError>}
-            <InputGroup>
-               <Input type="email" placeholder="관리자 이메일" aria-label="관리자 이메일" error={errors.email} {...register('email', { required: '이메일을 입력해주세요.' })} />
-               <Input type="password" placeholder="비밀번호" aria-label="비밀번호" error={errors.password} {...register('password', { required: '비밀번호를 입력해주세요.' })} />
-            </InputGroup>
-            <Button type="submit" disabled={isSubmitting} fullWidth size="large">
-               {isSubmitting ? '로그인 중...' : '로그인'}
-            </Button>
-         </FormWrapper>
-      </Container>
+      <PageWrapper>
+         <ModernHeroSection gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" ref={heroRef}>
+            <HeroBackground />
+            <HeroContainer>
+               <motion.div
+                  initial="hidden"
+                  animate={heroInView ? "visible" : "hidden"}
+                  variants={staggerContainer}
+               >
+                  <HeroBadge as={motion.div} variants={fadeInScale}>
+                     <FaUserShield /> 관리자
+                  </HeroBadge>
+                  <HeroTitle as={motion.h1} variants={slideInLeft}>
+                     <GradientText>관리자</GradientText> 로그인
+                  </HeroTitle>
+                  <HeroSubtitle as={motion.p} variants={slideInRight}>
+                     "KHAMA 관리 시스템에 안전하게 접속하세요"
+                  </HeroSubtitle>
+                  <HeroDescription as={motion.p} variants={slideInRight}>
+                     관리자 전용 계정으로 시스템을 관리하고 모니터링하세요
+                  </HeroDescription>
+               </motion.div>
+            </HeroContainer>
+         </ModernHeroSection>
+
+         <Container>
+            <Section ref={formRef}>
+               <LoginCard
+                  as={motion.div}
+                  initial="hidden"
+                  animate={formInView ? "visible" : "hidden"}
+                  variants={staggerContainer}
+               >
+                  <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+                     {errors.root?.serverError && (
+                        <ServerError as={motion.div} variants={fadeInUp}>
+                           <FaExclamationCircle />
+                           {errors.root.serverError.message}
+                        </ServerError>
+                     )}
+                     
+                     <FormField as={motion.div} variants={fadeInUp}>
+                        <FieldIcon>
+                           <FaEnvelope />
+                        </FieldIcon>
+                        <div style={{ flex: 1 }}>
+                           <FieldLabel>관리자 이메일</FieldLabel>
+                           <StyledInput
+                              type="email"
+                              placeholder="관리자 이메일을 입력하세요"
+                              error={errors.email}
+                              {...register('email', { required: '이메일을 입력해주세요.' })}
+                           />
+                           {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+                        </div>
+                     </FormField>
+                     
+                     <FormField as={motion.div} variants={fadeInUp}>
+                        <FieldIcon>
+                           <FaLock />
+                        </FieldIcon>
+                        <div style={{ flex: 1 }}>
+                           <FieldLabel>비밀번호</FieldLabel>
+                           <StyledInput
+                              type="password"
+                              placeholder="비밀번호를 입력하세요"
+                              error={errors.password}
+                              {...register('password', { required: '비밀번호를 입력해주세요.' })}
+                           />
+                           {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
+                        </div>
+                     </FormField>
+                     
+                     <SubmitButton 
+                        as={motion.button}
+                        variants={fadeInUp}
+                        type="submit" 
+                        disabled={isSubmitting}
+                     >
+                        {isSubmitting ? (
+                           <>로그인 중...</>
+                        ) : (
+                           <><FaSignInAlt /> 관리자 로그인</>
+                        )}
+                     </SubmitButton>
+                  </FormWrapper>
+               </LoginCard>
+            </Section>
+         </Container>
+      </PageWrapper>
    )
 }
 
-const Container = styled.div`
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   padding: 4rem 2rem;
-   min-height: 100vh; /* 전체 높이 */
-   background-color: #e9ecf0; /* 관리자 페이지 배경색 */
+// AdminLoginPage 전용 스타일 컴포넌트
+const LoginCard = styled(Card)`
+   max-width: 500px;
+   margin: 0 auto;
+   padding: 0;
+   overflow: hidden;
 `
 
 const FormWrapper = styled.form`
-   width: 100%;
-   max-width: 420px;
    padding: 3rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   background-color: #fff;
-   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-`
-
-const Title = styled.h1`
-   font-size: ${({ theme }) => theme.fontSizes.h3};
-   font-weight: 700;
-   text-align: center;
-   margin-bottom: 0.5rem;
-   color: ${({ theme }) => theme.colors.text};
-`
-
-const Description = styled.p`
-   font-size: ${({ theme }) => theme.fontSizes.medium};
-   color: ${({ theme }) => theme.colors.textSecondary};
-   text-align: center;
-   margin-bottom: 2.5rem;
-`
-
-const InputGroup = styled.div`
-   margin-bottom: 1.5rem;
-
-   > div {
-      /* InputWrapper */
-      margin-bottom: 1rem;
-      &:last-child {
-         margin-bottom: 0;
-      }
+   
+   @media (max-width: 768px) {
+      padding: 2rem;
    }
 `
 
-const ServerError = styled.p`
-   color: ${({ theme }) => theme.colors.error};
-   background-color: rgba(220, 53, 69, 0.1);
-   padding: 0.8rem;
-   border-radius: 4px;
-   margin-bottom: 1rem;
-   text-align: center;
-   font-size: 0.9rem;
+const FormField = styled.div`
+   display: flex;
+   align-items: flex-start;
+   gap: 1.5rem;
+   margin-bottom: 2rem;
+   
+   @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 1rem;
+   }
+`
+
+const FieldIcon = styled.div`
+   width: 50px;
+   height: 50px;
+   border-radius: 12px;
+   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 1.2rem;
+   color: white;
+   flex-shrink: 0;
+   
+   @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+   }
+`
+
+const FieldLabel = styled.label`
+   display: block;
+   font-size: 1.1rem;
+   font-weight: 600;
+   color: #1e293b;
+   margin-bottom: 0.75rem;
+`
+
+const StyledInput = styled.input`
+   width: 100%;
+   padding: 1rem 1.25rem;
+   border: 2px solid ${({ error }) => (error ? '#ef4444' : '#e2e8f0')};
+   border-radius: 12px;
+   font-size: 1rem;
+   transition: all 0.3s ease;
+   outline: none;
+   
+   &:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+   }
+   
+   &::placeholder {
+      color: #94a3b8;
+   }
+`
+
+const ErrorMessage = styled.p`
+   color: #ef4444;
+   font-size: 0.875rem;
+   margin-top: 0.5rem;
+   display: flex;
+   align-items: center;
+   gap: 0.25rem;
+`
+
+const SubmitButton = styled.button`
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 0.5rem;
+   padding: 1rem 2rem;
+   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   color: white;
+   border: none;
+   border-radius: 50px;
+   font-size: 1rem;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+   margin-top: 1rem;
+   
+   &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+   }
+   
+   &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+   }
+`
+
+const ServerError = styled.div`
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   color: #ef4444;
+   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+   border: 2px solid #fecaca;
+   padding: 1rem 1.5rem;
+   border-radius: 12px;
+   margin-bottom: 2rem;
+   font-size: 0.95rem;
+   font-weight: 500;
+   
+   svg {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+   }
 `

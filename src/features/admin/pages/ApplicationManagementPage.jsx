@@ -1,122 +1,286 @@
+import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
+import { FaClipboardList, FaSearch, FaCheck, FaTimes, FaClock, FaEye, FaEdit } from 'react-icons/fa'
+import { useInView } from 'react-intersection-observer'
 import styled from 'styled-components'
-import { Button } from '@/components/common/Button'
+import {
+   fadeInUp,
+   fadeInScale,
+   staggerContainer,
+   slideInLeft,
+   slideInRight,
+   PageWrapper,
+   Container,
+   ModernHeroSection,
+   HeroBackground,
+   HeroContainer,
+   HeroBadge,
+   HeroTitle,
+   GradientText,
+   HeroSubtitle,
+   HeroDescription,
+   Section,
+   SectionHeader,
+   SectionTitle,
+   Card,
+} from '../../../components/common/SharedStyles'
 
 export function ApplicationManagementPage() {
+   // motion 컴포넌트 사용을 위한 필수 import 보장
+   const MotionDiv = motion.div
+
+   const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
+   const { ref: contentRef, inView: contentInView } = useInView({ triggerOnce: true, threshold: 0.2 })
+
+   // TODO: 실제 데이터 가져오기
+   const applications = [
+      { id: 1, name: '김철수', course: '가전제품분해청소관리사', type: '교육', date: '2024-01-15', status: '대기' },
+      { id: 2, name: '이영희', course: '냉난방기 세척서비스 관리사', type: '시험', date: '2024-01-14', status: '승인' },
+      { id: 3, name: '박민수', course: '에어컨설치 관리사', type: '교육', date: '2024-01-13', status: '반려' },
+   ]
+
+   const getStatusIcon = (status) => {
+      switch (status) {
+         case '승인':
+            return FaCheck
+         case '대기':
+            return FaClock
+         case '반려':
+            return FaTimes
+         default:
+            return FaClock
+      }
+   }
+
    return (
-      <Container>
-         <Title>신청서 관리</Title>
-         {/* TODO: 신청서 목록 테이블, 검색/필터링, 승인/거절 처리 기능 구현 */}
-         <Placeholder>접수된 교육/시험 신청서 목록 및 관리 기능이 여기에 표시됩니다.</Placeholder>
-      </Container>
+      <PageWrapper>
+         <ModernHeroSection gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" ref={heroRef}>
+            <HeroBackground />
+            <HeroContainer>
+               <motion.div initial="hidden" animate={heroInView ? 'visible' : 'hidden'} variants={staggerContainer}>
+                  <HeroBadge as={motion.div} variants={fadeInScale}>
+                     <FaClipboardList /> 신청서 관리
+                  </HeroBadge>
+                  <HeroTitle as={motion.h1} variants={slideInLeft}>
+                     <GradientText>신청서</GradientText> 관리
+                  </HeroTitle>
+                  <HeroSubtitle as={motion.p} variants={slideInRight}>
+                     "교육 및 시험 신청서를 효율적으로 관리하세요"
+                  </HeroSubtitle>
+                  <HeroDescription as={motion.p} variants={slideInRight}>
+                     접수된 모든 신청서를 한눈에 확인하고 승인/반려 처리를 진행하세요
+                  </HeroDescription>
+               </motion.div>
+            </HeroContainer>
+         </ModernHeroSection>
+
+         <Container>
+            <Section ref={contentRef}>
+               <SectionHeader>
+                  <SectionTitle as={motion.h2} initial="hidden" animate={contentInView ? 'visible' : 'hidden'} variants={fadeInUp}>
+                     <FaSearch /> 신청서 목록
+                  </SectionTitle>
+               </SectionHeader>
+
+               <ApplicationCard as={motion.div} initial="hidden" animate={contentInView ? 'visible' : 'hidden'} variants={staggerContainer}>
+                  <TableWrapper as={motion.div} variants={fadeInUp}>
+                     <ApplicationTable>
+                        <thead>
+                           <tr>
+                              <th>신청자</th>
+                              <th>과정명</th>
+                              <th>유형</th>
+                              <th>신청일</th>
+                              <th>상태</th>
+                              <th>관리</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {applications.map((app) => {
+                              const StatusIcon = getStatusIcon(app.status)
+                              return (
+                                 <tr key={app.id}>
+                                    <td>{app.name}</td>
+                                    <td>{app.course}</td>
+                                    <td>
+                                       <TypeBadge type={app.type}>{app.type}</TypeBadge>
+                                    </td>
+                                    <td>{app.date}</td>
+                                    <td>
+                                       <StatusBadge status={app.status}>
+                                          <StatusIcon />
+                                          {app.status}
+                                       </StatusBadge>
+                                    </td>
+                                    <td>
+                                       <ActionButtons>
+                                          <ActionButton>
+                                             <FaEye />
+                                          </ActionButton>
+                                          <ActionButton>
+                                             <FaEdit />
+                                          </ActionButton>
+                                          <ActionButton status="approve">
+                                             <FaCheck />
+                                          </ActionButton>
+                                          <ActionButton status="reject">
+                                             <FaTimes />
+                                          </ActionButton>
+                                       </ActionButtons>
+                                    </td>
+                                 </tr>
+                              )
+                           })}
+                        </tbody>
+                     </ApplicationTable>
+                  </TableWrapper>
+
+                  {applications.length === 0 && (
+                     <PlaceholderContent as={motion.div} variants={fadeInUp}>
+                        <FaClipboardList size={48} />
+                        <h3>신청서가 없습니다</h3>
+                        <p>아직 접수된 교육/시험 신청서가 없습니다.</p>
+                     </PlaceholderContent>
+                  )}
+               </ApplicationCard>
+            </Section>
+         </Container>
+      </PageWrapper>
    )
 }
 
-const Container = styled.div``
-const Title = styled.h1`
-   font-size: ${({ theme }) => theme.fontSizes.h3};
-   font-weight: 700;
-   margin-bottom: 1.5rem;
+// ApplicationManagementPage 전용 스타일 컴포넌트
+const ApplicationCard = styled(Card)`
+   padding: 0;
+   overflow: hidden;
 `
 
-const FilterSection = styled.div`
-   display: flex;
-   gap: 1rem;
-   align-items: center; // 세로 정렬 추가
-   margin-bottom: 1.5rem;
-   background-color: #fff;
-   padding: 1.5rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   border: 1px solid ${({ theme }) => theme.colors.border};
-
-   > div {
-      margin-bottom: 0;
-   } // Input, Select 래퍼 마진 제거
+const TableWrapper = styled.div`
+   overflow-x: auto;
 `
 
 const ApplicationTable = styled.table`
-   // UserTable -> ApplicationTable 이름 변경
    width: 100%;
    border-collapse: collapse;
-   background-color: #fff;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   border: 1px solid ${({ theme }) => theme.colors.border};
-   overflow: hidden; /* radius 적용 위해 */
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
    th,
    td {
-      padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+      padding: 1rem 1.5rem;
       text-align: left;
-      vertical-align: middle;
-      border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+      border-bottom: 1px solid #e2e8f0;
    }
 
    th {
-      background-color: ${({ theme }) => theme.colors.backgroundLight};
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       font-weight: 600;
-      color: ${({ theme }) => theme.colors.text};
+      color: #1e293b;
       font-size: 0.9rem;
    }
 
    td {
       font-size: 0.9rem;
-      color: ${({ theme }) => theme.colors.textSecondary};
+      color: #64748b;
    }
 
-   tbody tr {
-      &:last-child td {
-         border-bottom: none;
-      }
-      &:hover {
-         background-color: ${({ theme }) => theme.colors.primary}10;
-      }
+   tbody tr:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
    }
 
-   /* 체크박스, 상태, 관리 열 가운데 정렬 */
-   th:first-child,
-   td:first-child,
-   th:nth-child(6),
-   td:nth-child(6),
    th:last-child,
    td:last-child {
       text-align: center;
    }
 `
 
-const Th = styled.th``
-const Td = styled.td``
-
-// StatusBadge, ActionButton은 그대로 사용
-const StatusBadge = styled.span`
-   padding: 0.2rem 0.5rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   font-size: 0.75rem;
-   font-weight: 600;
+const TypeBadge = styled.span`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.25rem;
+   padding: 0.25rem 0.75rem;
+   border-radius: 20px;
+   font-size: 0.8rem;
+   font-weight: 500;
+   background: ${({ type }) => (type === '교육' ? 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' : 'linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%)')};
    color: white;
-   background-color: ${({ theme, status }) => (status === '승인' ? theme.colors.success : status === '대기' ? theme.colors.warning : status === '반려' ? theme.colors.error : theme.colors.textSecondary)};
 `
 
-const ActionButton = styled(Button)`
-   padding: 0.2rem 0.4rem;
+const StatusBadge = styled.span`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.5rem 1rem;
+   border-radius: 20px;
    font-size: 0.8rem;
-   margin-right: 0.3rem;
-   color: ${({ theme, color }) => (color ? theme.colors[color] : theme.colors.textSecondary)};
+   font-weight: 600;
+   background: ${({ status }) => {
+      switch (status) {
+         case '승인':
+            return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+         case '대기':
+            return 'linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%)'
+         case '반려':
+            return 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
+         default:
+            return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+      }
+   }};
+   color: white;
+`
+
+const ActionButtons = styled.div`
+   display: flex;
+   gap: 0.5rem;
+   justify-content: center;
+`
+
+const ActionButton = styled.button`
+   width: 32px;
+   height: 32px;
+   border: none;
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   font-size: 0.9rem;
+
+   background: ${({ status }) => {
+      switch (status) {
+         case 'approve':
+            return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+         case 'reject':
+            return 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
+         default:
+            return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+      }
+   }};
+   color: white;
 
    &:hover {
-      background-color: ${({ theme }) => theme.colors.backgroundLight};
-   }
-
-   &:last-child {
-      margin-right: 0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
    }
 `
 
-const Placeholder = styled.div`
-   background-color: #fff;
-   padding: 2rem;
-   border-radius: 8px;
-   border: 1px solid #eee;
+const PlaceholderContent = styled.div`
+   padding: 4rem 2rem;
    text-align: center;
-   color: #888;
-   font-style: italic;
+   color: #94a3b8;
+
+   svg {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+   }
+
+   h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 0.5rem;
+   }
+
+   p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+   }
 `

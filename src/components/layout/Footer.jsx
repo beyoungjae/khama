@@ -37,8 +37,10 @@ export function Footer() {
             <FooterSection>
                <SectionTitle>Contact Us</SectionTitle>
                <ContactInfo>
-                  <p>주소: 인천 서구 청라한내로72번길 13 청라 큐브시그니처 2차 오피스텔 201호-206호</p>
+                  <p>주소: 인천광역시 서구 청라한내로72번길 13 (청라동) 203호</p>
                   <p>대표번호: 1566-3321</p>
+                  <p>사업자등록번호: 108-82-87006</p>
+                  <p>대표자명: 김윤채</p>
                   <p>이메일: haan@hanallcompany.com</p>
                </ContactInfo>
                {/* <SocialLinks>
@@ -48,6 +50,7 @@ export function Footer() {
                </SocialLinks> */}
             </FooterSection>
          </FooterContent>
+         <LegalNotice>본 협회에서 발급하는 자격증은 자격기본법에 따른 등록민간자격으로, 국가공인자격이 아닙니다. 민간자격 관련 상세정보는 민간자격정보서비스(www.pqi.or.kr)를 참고하시기 바랍니다.</LegalNotice>
          <Copyright>© {new Date().getFullYear()} KHAMA (한국생활가전유지관리협회). All rights reserved.</Copyright>
       </FooterContainer>
    )
@@ -165,6 +168,19 @@ const SocialLink = styled.a`
    &:hover {
       color: ${({ theme }) => theme.colors.primary};
    }
+`
+
+const LegalNotice = styled.div`
+   text-align: center;
+   font-size: ${({ theme }) => theme.fontSizes.small};
+   color: ${({ theme }) => theme.colors.warning};
+   background-color: ${({ theme }) => theme.colors.warning}10;
+   padding: ${({ theme }) => theme.spacing.md};
+   border-radius: ${({ theme }) => theme.borderRadius};
+   border: 1px solid ${({ theme }) => theme.colors.warning}30;
+   margin: ${({ theme }) => theme.spacing.lg} 0;
+   line-height: 1.6;
+   font-weight: 500;
 `
 
 const Copyright = styled.p`

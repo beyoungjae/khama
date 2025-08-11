@@ -1,15 +1,41 @@
+import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { FaClipboardList, FaCheck, FaClock, FaTimes, FaArrowLeft, FaSpinner } from 'react-icons/fa'
+import { useInView } from 'react-intersection-observer'
 import styled from 'styled-components'
 import { useAuth } from '@/contexts/AuthContext'
 import { getUserApplications } from '@/services/myPageService'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/common/Button'
+import {
+  fadeInUp,
+  fadeInScale,
+  staggerContainer,
+  slideInLeft,
+  slideInRight,
+  PageWrapper,
+  Container,
+  ModernHeroSection,
+  HeroBackground,
+  HeroContainer,
+  HeroBadge,
+  HeroTitle,
+  GradientText,
+  HeroSubtitle,
+  HeroDescription,
+  Section,
+  Card
+} from '../../../components/common/SharedStyles'
 
 export function MyApplicationsPage() {
+   // motion 컴포넌트 사용을 위한 필수 import 보장
+   const MotionDiv = motion.div
+   
    const { user } = useAuth()
    const [applications, setApplications] = useState([])
    const [loading, setLoading] = useState(true)
    const [error, setError] = useState(null)
+   const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
+   const { ref: contentRef, inView: contentInView } = useInView({ triggerOnce: true, threshold: 0.2 })
 
    useEffect(() => {
       if (!user?.id) return
@@ -31,164 +57,347 @@ export function MyApplicationsPage() {
       fetchData()
    }, [user])
 
+   const getStatusIcon = (status) => {
+      switch (status) {
+         case '승인': return FaCheck
+         case '대기': return FaClock
+         case '반려': return FaTimes
+         default: return FaClock
+      }
+   }
+
    if (loading) {
       return (
-         <Container>
-            <Title>나의 신청 내역</Title>
-            <LoadingText>로딩 중...</LoadingText>
-         </Container>
+         <PageWrapper>
+            <Container>
+               <LoadingCard>
+                  <FaSpinner className="spinner" />
+                  <h3>신청 내역을 불러오는 중...</h3>
+                  <p>잠시만 기다려주세요.</p>
+               </LoadingCard>
+            </Container>
+         </PageWrapper>
       )
    }
 
    if (error) {
       return (
-         <Container>
-            <Title>나의 신청 내역</Title>
-            <ErrorText>{error}</ErrorText>
-         </Container>
+         <PageWrapper>
+            <Container>
+               <ErrorCard>
+                  <FaTimes />
+                  <h3>오류가 발생했습니다</h3>
+                  <p>{error}</p>
+               </ErrorCard>
+            </Container>
+         </PageWrapper>
       )
    }
 
    return (
-      <Container>
-         <Title>나의 신청 내역</Title>
-         {applications.length > 0 ? (
-            <ApplicationTable>
-               <colgroup>
-                  <col style={{ width: '15%' }} />
-                  <col style={{ width: 'auto' }} />
-                  <col style={{ width: '20%' }} />
-                  <col style={{ width: '15%' }} />
-               </colgroup>
-               <thead>
-                  <tr>
-                     <Th>신청 종류</Th>
-                     <Th>상세 내용</Th>
-                     <Th>신청일</Th>
-                     <Th>상태</Th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {applications.map((app) => (
-                     <tr key={app.id}>
-                        <Td>{app.type}</Td>
-                        <Td>{app.name}</Td>
-                        <Td>{app.date}</Td>
-                        <Td>
-                           <StatusBadge status={app.status}>{app.status}</StatusBadge>
-                        </Td>
-                     </tr>
-                  ))}
-               </tbody>
-            </ApplicationTable>
-         ) : (
-            <Placeholder>신청 내역이 없습니다.</Placeholder>
-         )}
-         <ButtonWrapper>
-            <Button as={Link} to="/my-page" variant="outline">
-               마이페이지로 돌아가기
-            </Button>
-         </ButtonWrapper>
-      </Container>
+      <PageWrapper>
+         <ModernHeroSection gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" ref={heroRef}>
+            <HeroBackground />
+            <HeroContainer>
+               <motion.div
+                  initial="hidden"
+                  animate={heroInView ? "visible" : "hidden"}
+                  variants={staggerContainer}
+               >
+                  <HeroBadge as={motion.div} variants={fadeInScale}>
+                     <FaClipboardList /> 신청 내역
+                  </HeroBadge>
+                  <HeroTitle as={motion.h1} variants={slideInLeft}>
+                     나의 <GradientText>신청 내역</GradientText>
+                  </HeroTitle>
+                  <HeroSubtitle as={motion.p} variants={slideInRight}>
+                     "모든 신청 내역을 확인하고 관리하세요"
+                  </HeroSubtitle>
+                  <HeroDescription as={motion.p} variants={slideInRight}>
+                     교육과 시험 신청 현황을 한눈에 확인할 수 있습니다
+                  </HeroDescription>
+               </motion.div>
+            </HeroContainer>
+         </ModernHeroSection>
+
+         <Container>
+            <Section ref={contentRef}>
+               {applications.length > 0 ? (
+                  <ApplicationsCard
+                     as={motion.div}
+                     initial="hidden"
+                     animate={contentInView ? "visible" : "hidden"}
+                     variants={fadeInScale}
+                  >
+                     <CardHeader>
+                        <FaClipboardList />
+                        <h3>신청 내역 목록</h3>
+                     </CardHeader>
+                     <ApplicationTable>
+                        <colgroup>
+                           <col style={{ width: '15%' }} />
+                           <col style={{ width: 'auto' }} />
+                           <col style={{ width: '20%' }} />
+                           <col style={{ width: '15%' }} />
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <Th>신청 종류</Th>
+                              <Th>상세 내용</Th>
+                              <Th>신청일</Th>
+                              <Th>상태</Th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {applications.map((app, index) => {
+                              const StatusIcon = getStatusIcon(app.status)
+                              return (
+                                 <motion.tr 
+                                    key={app.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={contentInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                                    transition={{ delay: index * 0.1 }}
+                                 >
+                                    <Td>
+                                       <TypeBadge type={app.type}>
+                                          {app.type}
+                                       </TypeBadge>
+                                    </Td>
+                                    <Td>{app.name}</Td>
+                                    <Td>{app.date}</Td>
+                                    <Td>
+                                       <StatusBadge status={app.status}>
+                                          <StatusIcon />
+                                          {app.status}
+                                       </StatusBadge>
+                                    </Td>
+                                 </motion.tr>
+                              )
+                           })}
+                        </tbody>
+                     </ApplicationTable>
+                  </ApplicationsCard>
+               ) : (
+                  <EmptyCard
+                     as={motion.div}
+                     initial="hidden"
+                     animate={contentInView ? "visible" : "hidden"}
+                     variants={fadeInScale}
+                  >
+                     <FaClipboardList />
+                     <h3>신청 내역이 없습니다</h3>
+                     <p>교육이나 시험에 신청하시면 여기에서 확인할 수 있습니다.</p>
+                  </EmptyCard>
+               )}
+               
+               <BackButton
+                  as={motion.div}
+                  initial="hidden"
+                  animate={contentInView ? "visible" : "hidden"}
+                  variants={fadeInUp}
+                  transition={{ delay: 0.3 }}
+               >
+                  <Link to="/my-page">
+                     <FaArrowLeft /> 마이페이지로 돌아가기
+                  </Link>
+               </BackButton>
+            </Section>
+         </Container>
+      </PageWrapper>
    )
 }
 
-// MyPage.jsx 또는 다른 관리 페이지와 유사한 스타일 사용
-const Container = styled.div`
-   padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing.lg}`};
-   max-width: 1000px; // 너비 조정
-   margin: 0 auto;
-`
-
-const Title = styled.h1`
-   font-size: ${({ theme }) => theme.fontSizes.h2}; // 크기 조정
-   font-weight: 700;
-   margin-bottom: ${({ theme }) => theme.spacing.xl};
-`
-
-const LoadingText = styled.p`
+// 현대화된 스타일 컴포넌트
+const LoadingCard = styled(Card)`
+   max-width: 400px;
+   margin: 4rem auto;
    text-align: center;
-   padding: 2rem;
-   font-size: 1.1rem;
-   color: ${({ theme }) => theme.colors.textSecondary};
+   padding: 3rem 2rem;
+   
+   .spinner {
+      font-size: 2rem;
+      color: #4facfe;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+   }
+   
+   @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+   }
+   
+   h3 {
+      font-size: 1.25rem;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+   }
+   
+   p {
+      color: #64748b;
+   }
 `
 
-const ErrorText = styled.p`
+const ErrorCard = styled(Card)`
+   max-width: 400px;
+   margin: 4rem auto;
    text-align: center;
-   padding: 2rem;
-   font-size: 1.1rem;
-   color: ${({ theme }) => theme.colors.error};
+   padding: 3rem 2rem;
+   
+   svg {
+      font-size: 2rem;
+      color: #ef4444;
+      margin-bottom: 1rem;
+   }
+   
+   h3 {
+      font-size: 1.25rem;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+   }
+   
+   p {
+      color: #64748b;
+   }
+`
+
+const ApplicationsCard = styled(Card)`
+   margin-bottom: 2rem;
+`
+
+const CardHeader = styled.div`
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   margin-bottom: 2rem;
+   padding-bottom: 1rem;
+   border-bottom: 2px solid #e2e8f0;
+   
+   svg {
+      font-size: 1.5rem;
+      color: #4facfe;
+   }
+   
+   h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0;
+   }
 `
 
 const ApplicationTable = styled.table`
    width: 100%;
    border-collapse: collapse;
-   background-color: #fff;
-   border-radius: ${({ theme }) => theme.borderRadius};
-   border: 1px solid ${({ theme }) => theme.colors.border};
-   overflow: hidden;
-   box-shadow: ${({ theme }) => theme.boxShadow};
-   margin-top: 1.5rem;
-
-   th,
-   td {
-      padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`}; // 패딩 조정
+   
+   th, td {
+      padding: 1rem;
       text-align: left;
-      vertical-align: middle;
-      border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+      border-bottom: 1px solid #e2e8f0;
    }
-
+   
    th {
-      background-color: ${({ theme }) => theme.colors.backgroundLight};
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       font-weight: 600;
-      color: ${({ theme }) => theme.colors.text};
-      font-size: 0.95rem; // 약간 키움
+      color: #475569;
+      font-size: 0.95rem;
    }
-
+   
    td {
       font-size: 0.9rem;
-      color: ${({ theme }) => theme.colors.textSecondary};
-
-      /* 상태 열 가운데 정렬 */
+      color: #64748b;
+      
       &:last-child {
          text-align: center;
       }
    }
-
-   tbody tr {
-      &:last-child td {
-         border-bottom: none;
-      }
-      &:hover {
-         background-color: ${({ theme }) => theme.colors.primary}10;
-      }
+   
+   tbody tr:hover {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
    }
 `
 
 const Th = styled.th``
 const Td = styled.td``
 
+const TypeBadge = styled.span`
+   display: inline-block;
+   padding: 0.25rem 0.5rem;
+   border-radius: 12px;
+   font-size: 0.75rem;
+   font-weight: 600;
+   background: ${({ type }) => {
+      switch (type) {
+         case '교육': return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+         case '시험': return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+         default: return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+      }
+   }};
+   color: white;
+`
+
 const StatusBadge = styled.span`
-   padding: 0.3rem 0.6rem;
-   border-radius: ${({ theme }) => theme.borderRadius};
+   display: inline-flex;
+   align-items: center;
+   gap: 0.25rem;
+   padding: 0.25rem 0.75rem;
+   border-radius: 20px;
    font-size: 0.8rem;
    font-weight: 600;
+   background: ${({ status }) => {
+      switch (status) {
+         case '승인': return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+         case '대기': return 'linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%)'
+         case '반려': return 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
+         default: return 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)'
+      }
+   }};
    color: white;
-   background-color: ${({ theme, status }) => (status === '승인' ? theme.colors.success : status === '대기' ? theme.colors.warning : status === '반려' ? theme.colors.error : theme.colors.textSecondary)};
 `
 
-const Placeholder = styled.div`
-   color: ${({ theme }) => theme.colors.textSecondary};
+const EmptyCard = styled(Card)`
    text-align: center;
-   padding: 3rem 0;
-   font-style: italic;
-   background-color: #fff;
-   border: 1px dashed ${({ theme }) => theme.colors.border};
-   border-radius: ${({ theme }) => theme.borderRadius};
-   margin-top: 1.5rem;
+   padding: 4rem 2rem;
+   margin-bottom: 2rem;
+   
+   svg {
+      font-size: 3rem;
+      color: #94a3b8;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+   }
+   
+   h3 {
+      font-size: 1.25rem;
+      color: #64748b;
+      margin-bottom: 1rem;
+   }
+   
+   p {
+      color: #94a3b8;
+      font-style: italic;
+   }
 `
 
-const ButtonWrapper = styled.div`
-   margin-top: ${({ theme }) => theme.spacing.xl};
+const BackButton = styled.div`
    text-align: center;
+   
+   a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      color: #4facfe;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      
+      &:hover {
+         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+         color: white;
+         transform: translateY(-2px);
+         box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+      }
+   }
 `
