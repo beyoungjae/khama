@@ -17,7 +17,7 @@ const menuItems = [
    },
    {
       name: '자격증',
-      path: '/certification',
+      path: '/certification/appliance-cleaning',
       subItems: [
          { name: '가전제품분해청소관리사', path: '/certification/appliance-cleaning' },
          { name: '냉난방기 세척서비스 관리사', path: '/certification/air-conditioner-service' },
