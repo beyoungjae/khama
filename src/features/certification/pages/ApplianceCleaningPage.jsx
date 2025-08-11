@@ -446,7 +446,7 @@ export function ApplianceCleaningPage() {
                         icon: <FaSprayCan />,
                         title: '전문 청소 및 세척',
                         description: '각 부품에 맞는 전용 세제와 도구로 깨끗하게 청소합니다.',
-                        details: ['부품별 맞춤 세제 적용', '고압 세척 및 초음파 세척', '세균 및 곰팡이 완전 제거', '건조 및 상태 최终 점검'],
+                        details: ['부품별 맞춤 세제 적용', '고압 세척 및 초음파 세척', '세균 및 곰팡이 완전 제거', '건조 및 상태 점검'],
                         badge: '청소 단계',
                      },
                      {
