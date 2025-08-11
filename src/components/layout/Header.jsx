@@ -10,9 +10,19 @@ const menuItems = [
       name: '협회소개',
       path: '/association',
       subItems: [
-         { name: '인사말', path: '/association/greeting' }, // 예시 경로
+         { name: '인사말', path: '/association/greeting' },
          { name: '설립목적', path: '/association/purpose' },
          { name: '오시는길', path: '/association/location' },
+      ],
+   },
+   {
+      name: '자격증',
+      path: '/certification',
+      subItems: [
+         { name: '가전제품분해청소관리사', path: '/certification/appliance-cleaning' },
+         { name: '냉난방기 세척서비스 관리사', path: '/certification/air-conditioner-service' },
+         { name: '에어컨설치 관리사', path: '/certification/air-conditioner-installation' },
+         { name: '환기청정시스템 관리사', path: '/certification/ventilation-system' },
       ],
    },
    {
@@ -30,10 +40,14 @@ const menuItems = [
       path: '/exam-info',
       subItems: [
          { name: '자격검정과목', path: '/exam-info/subjects' },
-         { name: '프로그램안내', path: '/exam-info/programs' }, // 교육안내 하위였으나 이쪽으로?
+         { name: '프로그램안내', path: '/exam-info/programs' },
       ],
    },
-   { name: '제품인증', path: '/product-cert', subItems: [{ name: '웰존', path: '/product-cert/welzone' }] },
+   {
+      name: '제품인증',
+      path: '/product-cert',
+      subItems: [{ name: '웰존', path: '/product-cert/welzone' }],
+   },
    {
       name: '고객센터',
       path: '/notice',
@@ -281,14 +295,6 @@ const MainNavItem = styled(NavLink)`
    ${navItemStyle}
 `
 
-// 링크가 없는 메인 네비게이션 아이템 (하위 메뉴 표시용)
-const MainNavItemNoLink = styled.span`
-   ${navItemStyle}
-   cursor: default; // 클릭 불가능 표시
-   /* hover 효과를 다르게 주거나 제거할 수 있음 */
-   /* &:hover { color: inherit; } */
-`
-
 // --- 메가 메뉴 스타일 --- //
 const MegaMenuContainer = styled(motion.div)`
    position: absolute;
@@ -305,12 +311,20 @@ const MegaMenuContainer = styled(motion.div)`
 
 const MegaMenuGrid = styled.div`
    display: grid;
-   /* 메뉴 아이템 개수에 따라 조정 (5개 예시) */
-   grid-template-columns: repeat(5, 1fr);
-   max-width: 1200px; // 최대 너비 설정
+   /* 메뉴 아이템 개수에 따라 조정 (6개) */
+   grid-template-columns: repeat(6, 1fr);
+   max-width: 1400px; // 최대 너비 설정 (6개 컬럼에 맞게 확장)
    margin: 0 auto; // 중앙 정렬
    padding: 0 ${({ theme }) => theme.spacing.xl}; // 좌우 패딩
    gap: ${({ theme }) => theme.spacing.lg};
+
+   @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr); // 중간 화면에서는 3열
+   }
+
+   @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr); // 작은 화면에서는 2열
+   }
 `
 
 const MegaMenuCategory = styled.div`

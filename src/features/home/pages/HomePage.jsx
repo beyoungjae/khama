@@ -471,67 +471,6 @@ export function HomePage() {
                </Grid>
             </CompactSection>
 
-            {/* 📊 실시간 현황 섹션 */}
-            <CompactSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-               <SectionHeader>
-                  <SectionTitle as={motion.h2} variants={fadeInScale}>
-                     실시간 현황
-                  </SectionTitle>
-                  <SectionSubtitle as={motion.p} variants={fadeInScale}>
-                     지금 이 순간에도 성장하고 있는 KHAMA
-                  </SectionSubtitle>
-               </SectionHeader>
-               <Grid columns={2}>
-                  <Card as={motion.div} variants={slideInLeft} style={{ padding: '2rem', background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)', color: 'white' }}>
-                     <CardTitle style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.3rem' }}>이번 달 교육 현황</CardTitle>
-                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={{ textAlign: 'center' }}>
-                           <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>127</div>
-                           <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>신규 수강생</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                           <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>89</div>
-                           <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>자격증 취득</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                           <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>34</div>
-                           <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>창업 성공</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                           <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>98%</div>
-                           <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>만족도</div>
-                        </div>
-                     </div>
-                  </Card>
-                  <Card as={motion.div} variants={slideInRight} style={{ padding: '2rem' }}>
-                     <CardTitle style={{ marginBottom: '1.5rem', fontSize: '1.3rem' }}>다가오는 일정</CardTitle>
-                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '10px' }}>
-                           <FaCalendar style={{ color: '#ff6b6b', fontSize: '1.2rem' }} />
-                           <div>
-                              <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>2025년 1월 정기 시험</div>
-                              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>접수 마감: 2025.01.15</div>
-                           </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '10px' }}>
-                           <FaBook style={{ color: '#ff6b6b', fontSize: '1.2rem' }} />
-                           <div>
-                              <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>신규 교육과정 개설</div>
-                              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>스마트홈 전문가 과정</div>
-                           </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '10px' }}>
-                           <FaUsers style={{ color: '#ff6b6b', fontSize: '1.2rem' }} />
-                           <div>
-                              <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>취업박람회 참가</div>
-                              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>2025.02.20 코엑스</div>
-                           </div>
-                        </div>
-                     </div>
-                  </Card>
-               </Grid>
-            </CompactSection>
-
             {/* 🚨 CTA 섹션 */}
             <CompactSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
                <SectionHeader>

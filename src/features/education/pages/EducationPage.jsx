@@ -4,7 +4,6 @@ import { FaBullseye, FaWrench, FaChalkboardTeacher, FaGraduationCap, FaUsers, Fa
 import { useInView } from 'react-intersection-observer'
 import { getImageUrl, getOptimizedImageProps } from '../../../utils/imageHelpers'
 import {
-   fadeInUp,
    fadeInScale,
    staggerContainer,
    slideInLeft,

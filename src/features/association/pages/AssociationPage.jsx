@@ -18,13 +18,9 @@ import {
    GradientText,
    HeroSubtitle,
    HeroImageContainer,
-   HeroImagePlaceholder,
-   Section,
    SectionHeader,
    SectionTitle,
    SectionSubtitle,
-   Grid,
-   Card,
    CardIcon,
    CardContent,
    CardTitle,
@@ -33,7 +29,6 @@ import {
    OverviewSection,
    OverviewGrid,
    OverviewCard,
-   HeroImageSection,
    ImageGallery,
    ImageGalleryItem,
    ImageCaption,
@@ -47,7 +42,6 @@ export function AssociationPage() {
    const { ref: visionRef, inView: visionInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: businessRef, inView: businessInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: historyRef, inView: historyInView } = useInView({ triggerOnce: true, threshold: 0.2 })
-   const { ref: orgRef, inView: orgInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: operationRef, inView: operationInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: executiveRef, inView: executiveInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: financeRef, inView: financeInView } = useInView({ triggerOnce: true, threshold: 0.2 })
@@ -275,48 +269,6 @@ export function AssociationPage() {
                </motion.div>
             </Container>
          </HistorySection>
-
-         {/* 조직 구성 섹션 */}
-         <OrganizationSection ref={orgRef}>
-            <Container>
-               <motion.div initial="hidden" animate={orgInView ? 'visible' : 'hidden'} variants={staggerContainer}>
-                  <SectionHeader>
-                     <SectionTitle>조직 구성</SectionTitle>
-                     <SectionSubtitle>체계적이고 전문적인 조직 운영 구조</SectionSubtitle>
-                  </SectionHeader>
-
-                  <OrgStructure>
-                     <OrgLevel variants={fadeInScale}>
-                        <OrgLevelTitle>이사회</OrgLevelTitle>
-                        <OrgLevelDescription>협회의 최고의결기관으로 총재와 이사장의 결의 임명으로 구성</OrgLevelDescription>
-                     </OrgLevel>
-
-                     <OrgLevel variants={fadeInScale}>
-                        <OrgLevelTitle>임원회</OrgLevelTitle>
-                        <OrgGrid>
-                           <OrgItem>이사장 (1인)</OrgItem>
-                           <OrgItem>이사 (1인 이상)</OrgItem>
-                           <OrgItem>고문 (1인 이상)</OrgItem>
-                           <OrgItem>자문위원 (1인 이상)</OrgItem>
-                           <OrgItem>감사 (1인)</OrgItem>
-                           <OrgItem>사무국장 (1인 이상)</OrgItem>
-                           <OrgItem>협회발전위원회</OrgItem>
-                        </OrgGrid>
-                     </OrgLevel>
-
-                     <OrgLevel variants={fadeInScale}>
-                        <OrgLevelTitle>검정관련 위원회</OrgLevelTitle>
-                        <OrgGrid>
-                           <OrgItem>검정기획담당</OrgItem>
-                           <OrgItem>인쇄담당</OrgItem>
-                           <OrgItem>채점담당</OrgItem>
-                           <OrgItem>검정관리담당</OrgItem>
-                        </OrgGrid>
-                     </OrgLevel>
-                  </OrgStructure>
-               </motion.div>
-            </Container>
-         </OrganizationSection>
 
          {/* 운영 원칙 섹션 */}
          <OperationSection ref={operationRef}>

@@ -304,7 +304,7 @@ export function ApplianceCleaningPage() {
                         </motion.div>
                      </ZigzagImage>
                   </ZigzagContent>
-                  
+
                   <ZigzagContent reverse>
                      <div>
                         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={slideInLeft}>
@@ -401,6 +401,66 @@ export function ApplianceCleaningPage() {
             </Container>
          </InfoSection>
 
+         {/* Before/After 청소 효과 비교 섹션 */}
+         <Section background="linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%)">
+            <Container>
+               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
+                  <SectionHeader>
+                     <SectionTitle as={motion.h2} variants={fadeInScale}>
+                        청소 전후 비교
+                     </SectionTitle>
+                     <SectionSubtitle as={motion.p} variants={fadeInScale}>
+                        전문적인 분해청소를 통한 놀라운 변화를 직접 확인하세요
+                     </SectionSubtitle>
+                  </SectionHeader>
+
+                  <motion.div variants={fadeInScale}>
+                     <BeforeAfterSlider beforeImage={getImageUrl('certifications', 'appliance/before.jpg')} afterImage={getImageUrl('certifications', 'appliance/after.jpg')} beforeLabel="청소 전" afterLabel="청소 후" alt="가전제품 청소 전후 비교" />
+                  </motion.div>
+               </motion.div>
+            </Container>
+         </Section>
+
+         {/* 작업 프로세스 타임라인 섹션 */}
+         <Section>
+            <Container>
+               <ProcessTimeline
+                  title="가전제품 분해청소 프로세스"
+                  subtitle="체계적이고 전문적인 4단계 청소 과정을 통해 최상의 결과를 보장합니다"
+                  steps={[
+                     {
+                        icon: <FaSearch />,
+                        title: '사전 점검 및 분석',
+                        description: '가전제품의 상태를 정밀 진단하고 최적의 청소 방법을 결정합니다.',
+                        details: ['제품 모델 및 제조년도 확인', '오염 정도 및 손상 부위 점검', '분해 가능한 부품 파악', '청소 도구 및 세제 선택'],
+                        badge: '진단 단계',
+                     },
+                     {
+                        icon: <FaWrench />,
+                        title: '안전한 분해 작업',
+                        description: '전문 도구를 사용하여 가전제품을 안전하게 분해합니다.',
+                        details: ['전원 차단 및 안전 점검', '부품별 순서에 따른 체계적 분해', '분해된 부품의 정리 및 보관', '특수 부품 분리 및 표시'],
+                        badge: '분해 단계',
+                     },
+                     {
+                        icon: <FaSprayCan />,
+                        title: '전문 청소 및 세척',
+                        description: '각 부품에 맞는 전용 세제와 도구로 깨끗하게 청소합니다.',
+                        details: ['부품별 맞춤 세제 적용', '고압 세척 및 초음파 세척', '세균 및 곰팡이 완전 제거', '건조 및 상태 최终 점검'],
+                        badge: '청소 단계',
+                     },
+                     {
+                        icon: <FaCheckCircle />,
+                        title: '조립 및 성능 테스트',
+                        description: '청소된 부품을 정확히 조립하고 성능을 확인합니다.',
+                        details: ['분해 순서의 역순으로 정밀 조립', '모든 연결부 및 나사 점검', '성능 테스트 및 안전 점검', '청소 완료 보고서 작성'],
+                        badge: '완성 단계',
+                     },
+                  ]}
+               />
+            </Container>
+         </Section>
+
          {/* 민간자격 법적 고지사항 섹션 */}
          <LegalNoticeSection ref={legalRef}>
             <Container>
@@ -484,130 +544,6 @@ export function ApplianceCleaningPage() {
                </motion.div>
             </Container>
          </LegalNoticeSection>
-
-         {/* Before/After 청소 효과 비교 섹션 */}
-         <Section background="linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%)">
-            <Container>
-               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-                  <SectionHeader>
-                     <SectionTitle as={motion.h2} variants={fadeInScale}>
-                        청소 전후 비교
-                     </SectionTitle>
-                     <SectionSubtitle as={motion.p} variants={fadeInScale}>
-                        전문적인 분해청소를 통한 놀라운 변화를 직접 확인하세요
-                     </SectionSubtitle>
-                  </SectionHeader>
-
-                  <motion.div variants={fadeInScale}>
-                     <BeforeAfterSlider
-                        beforeImage={getImageUrl('certifications', 'appliance/before.jpg')}
-                        afterImage={getImageUrl('certifications', 'appliance/after.jpg')}
-                        beforeLabel="청소 전"
-                        afterLabel="청소 후"
-                        alt="가전제품 청소 전후 비교"
-                     />
-                  </motion.div>
-               </motion.div>
-            </Container>
-         </Section>
-
-         {/* 작업 프로세스 타임라인 섹션 */}
-         <Section>
-            <Container>
-               <ProcessTimeline
-                  title="가전제품 분해청소 프로세스"
-                  subtitle="체계적이고 전문적인 4단계 청소 과정을 통해 최상의 결과를 보장합니다"
-                  steps={[
-                     {
-                        icon: <FaSearch />,
-                        title: "사전 점검 및 분석",
-                        description: "가전제품의 상태를 정밀 진단하고 최적의 청소 방법을 결정합니다.",
-                        details: [
-                           "제품 모델 및 제조년도 확인",
-                           "오염 정도 및 손상 부위 점검",
-                           "분해 가능한 부품 파악",
-                           "청소 도구 및 세제 선택"
-                        ],
-                        badge: "진단 단계"
-                     },
-                     {
-                        icon: <FaWrench />,
-                        title: "안전한 분해 작업",
-                        description: "전문 도구를 사용하여 가전제품을 안전하게 분해합니다.",
-                        details: [
-                           "전원 차단 및 안전 점검",
-                           "부품별 순서에 따른 체계적 분해",
-                           "분해된 부품의 정리 및 보관",
-                           "특수 부품 분리 및 표시"
-                        ],
-                        badge: "분해 단계"
-                     },
-                     {
-                        icon: <FaSprayCan />,
-                        title: "전문 청소 및 세척",
-                        description: "각 부품에 맞는 전용 세제와 도구로 깨끗하게 청소합니다.",
-                        details: [
-                           "부품별 맞춤 세제 적용",
-                           "고압 세척 및 초음파 세척",
-                           "세균 및 곰팡이 완전 제거",
-                           "건조 및 상태 최终 점검"
-                        ],
-                        badge: "청소 단계"
-                     },
-                     {
-                        icon: <FaCheckCircle />,
-                        title: "조립 및 성능 테스트",
-                        description: "청소된 부품을 정확히 조립하고 성능을 확인합니다.",
-                        details: [
-                           "분해 순서의 역순으로 정밀 조립",
-                           "모든 연결부 및 나사 점검",
-                           "성능 테스트 및 안전 점검",
-                           "청소 완료 보고서 작성"
-                        ],
-                        badge: "완성 단계"
-                     }
-                  ]}
-               />
-            </Container>
-         </Section>
-
-         {/* 작업 과정 갤러리 섹션 */}
-         <Section as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-            <Container>
-               <SectionHeader>
-                  <SectionTitle as={motion.h2} variants={fadeInScale}>
-                     실제 작업 과정
-                  </SectionTitle>
-                  <SectionSubtitle as={motion.p} variants={fadeInScale}>
-                     전문 자격증 취득자들의 실제 작업 모습을 확인하세요
-                  </SectionSubtitle>
-               </SectionHeader>
-
-               <ImageGallery>
-                  <ImageGalleryItem variants={fadeInScale}>
-                     <ResponsiveImage {...getOptimizedImageProps(getImageUrl('certifications', 'appliance/work.jpg'), '가전제품 분해 작업', [{ width: 400 }, { width: 800 }])} />
-                     <ImageCaption>
-                        <h4>전문 분해 작업</h4>
-                        <p>안전하고 체계적인 가전제품 분해 과정</p>
-                     </ImageCaption>
-                  </ImageGalleryItem>
-                  <ImageGalleryItem variants={fadeInScale}>
-                     <ResponsiveImage {...getOptimizedImageProps(getImageUrl('certifications', 'appliance/equipment.jpg'), '청소 장비', [{ width: 400 }, { width: 800 }])} />
-                     <ImageCaption>
-                        <h4>전문 청소 장비</h4>
-                        <p>최신 청소 장비를 활용한 효과적인 세척</p>
-                     </ImageCaption>
-                  </ImageGalleryItem>
-                  <ImageGalleryItem variants={fadeInScale}>
-                     <ResponsiveImage {...getOptimizedImageProps(getImageUrl('certifications', 'appliance/certificate.jpg'), '자격증 샘플', [{ width: 400 }, { width: 800 }])} />
-                     <ImageCaption>
-                        <h4>자격증 발급</h4>
-                        <p>교육 수료 후 전문 자격증 취득</p>
-                     </ImageCaption>
-                  </ImageGalleryItem>
-               </ImageGallery>
-            </Container>
-         </Section>
       </PageWrapper>
    )
 }

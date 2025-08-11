@@ -44,7 +44,6 @@ import {
    RequirementTitle,
    RequirementList,
    RequirementItem,
-   InfoSection,
    InfoCard,
    InfoIcon,
    InfoTitle,
@@ -77,13 +76,9 @@ import {
    StatCard,
    StatNumber,
    StatLabel,
-   ZigzagSection,
-   ZigzagLayout,
-   ZigzagContent,
-   ZigzagImage,
-   CompactSection,
    ExamNotice,
    NoticeText,
+   StatisticsGrid,
 } from '../../../components/common/SharedStyles'
 
 export function AirConditionerServicePage() {

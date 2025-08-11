@@ -28,16 +28,12 @@ import {
    Grid,
    Card,
    CardIcon,
-   CardContent,
    CardTitle,
    CardDescription,
 } from '../../../components/common/SharedStyles'
 import styled from 'styled-components'
 
 export function ContactPage() {
-   // motion 컴포넌트 사용을 위한 필수 import 보장
-   const MotionDiv = motion.div
-
    const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
    const { ref: formRef, inView: formInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: infoRef, inView: infoInView } = useInView({ triggerOnce: true, threshold: 0.2 })
@@ -97,39 +93,32 @@ export function ContactPage() {
                   </SectionSubtitle>
                </SectionHeader>
 
-               <Grid columns={1}>
+               <FormContainer>
                   <FormCard as={motion.form} initial="hidden" animate={formInView ? 'visible' : 'hidden'} variants={staggerContainer} onSubmit={handleSubmit(onSubmit)}>
-                     <FormField as={motion.div} variants={fadeInUp}>
-                        <FieldIcon>
-                           <FaUser />
-                        </FieldIcon>
-                        <Input label="성함" placeholder="성함을 입력해주세요" error={errors.name} {...register('name', { required: '성함을 입력해주세요.' })} />
-                     </FormField>
+                     <FormRow>
+                        <FormField as={motion.div} variants={fadeInUp}>
+                           <Input label="성함" placeholder="성함을 입력해주세요" error={errors.name} icon={<FaUser />} {...register('name', { required: '성함을 입력해주세요.' })} />
+                        </FormField>
+                        <FormField as={motion.div} variants={fadeInUp}>
+                           <Input
+                              label="이메일 주소"
+                              type="email"
+                              placeholder="답변 받으실 이메일 주소"
+                              error={errors.email}
+                              icon={<FaEnvelope />}
+                              {...register('email', {
+                                 required: '이메일을 입력해주세요.',
+                                 pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: '유효한 이메일 주소를 입력해주세요.',
+                                 },
+                              })}
+                           />
+                        </FormField>
+                     </FormRow>
 
                      <FormField as={motion.div} variants={fadeInUp}>
-                        <FieldIcon>
-                           <FaEnvelope />
-                        </FieldIcon>
-                        <Input
-                           label="이메일 주소"
-                           type="email"
-                           placeholder="답변 받으실 이메일 주소"
-                           error={errors.email}
-                           {...register('email', {
-                              required: '이메일을 입력해주세요.',
-                              pattern: {
-                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                 message: '유효한 이메일 주소를 입력해주세요.',
-                              },
-                           })}
-                        />
-                     </FormField>
-
-                     <FormField as={motion.div} variants={fadeInUp}>
-                        <FieldIcon>
-                           <FaPen />
-                        </FieldIcon>
-                        <Input label="문의 제목" placeholder="문의 제목을 입력해주세요" error={errors.title} {...register('title', { required: '문의 제목을 입력해주세요.' })} />
+                        <Input label="문의 제목" placeholder="문의 제목을 입력해주세요" error={errors.title} icon={<FaPen />} {...register('title', { required: '문의 제목을 입력해주세요.' })} />
                      </FormField>
 
                      <FormField as={motion.div} variants={fadeInUp}>
@@ -148,17 +137,20 @@ export function ContactPage() {
                         />
                      </FormField>
 
-                     <SubmitButton as={motion.button} type="submit" disabled={isSubmitting} variants={fadeInUp} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                        {isSubmitting ? (
-                           <>전송 중...</>
-                        ) : (
-                           <>
-                              문의 접수 <FaPaperPlane style={{ marginLeft: '8px' }} />
-                           </>
-                        )}
-                     </SubmitButton>
+                     <SubmitButtonWrapper as={motion.div} variants={fadeInUp}>
+                        <SubmitButton type="submit" disabled={isSubmitting} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                           {isSubmitting ? (
+                              <>전송 중...</>
+                           ) : (
+                              <>
+                                 <FaPaperPlane style={{ marginRight: '8px' }} />
+                                 문의 접수하기
+                              </>
+                           )}
+                        </SubmitButton>
+                     </SubmitButtonWrapper>
                   </FormCard>
-               </Grid>
+               </FormContainer>
             </Section>
 
             <Section ref={infoRef}>
@@ -178,7 +170,7 @@ export function ContactPage() {
                      </CardIcon>
                      <CardTitle>이메일 문의</CardTitle>
                      <CardDescription>
-                        khama@example.com
+                        haan@hanallcompany.com
                         <br />
                         원칙적으로 24시간 내 답변
                      </CardDescription>
@@ -190,7 +182,7 @@ export function ContactPage() {
                      </CardIcon>
                      <CardTitle>전화 상담</CardTitle>
                      <CardDescription>
-                        02-1234-5678
+                        1566-3321
                         <br />
                         평일 09:00 ~ 18:00 (점심시간 12:00~13:00 제외)
                      </CardDescription>
@@ -203,37 +195,191 @@ export function ContactPage() {
 }
 
 // ContactPage 전용 스타일 컴포넌트
+const FormContainer = styled.div`
+   display: flex;
+   justify-content: center;
+   width: 100%;
+`
+
 const FormCard = styled(Card)`
    padding: 3rem;
-   max-width: 800px;
-   margin: 0 auto;
+   max-width: 900px;
+   width: 100%;
+   background: white;
+   border-radius: 20px;
+   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+   border: 1px solid #f1f5f9;
+`
+
+const FormRow = styled.div`
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 2rem;
+   margin-bottom: 2rem;
+
+   @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+   }
 `
 
 const FormField = styled.div`
    position: relative;
    margin-bottom: 2rem;
-   display: flex;
-   align-items: flex-start;
-   gap: 1rem;
 `
 
-const FieldIcon = styled.div`
-   width: 40px;
-   height: 40px;
-   border-radius: 10px;
-   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+const SubmitButtonWrapper = styled.div`
+   display: flex;
+   justify-content: center;
+   margin-top: 2rem;
+`
+
+const InputWrapper = styled.div`
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+`
+
+const InputLabel = styled.label`
+   font-size: 1rem;
+   font-weight: 600;
+   color: #1f2937;
+   margin-bottom: 0.75rem;
    display: flex;
    align-items: center;
-   justify-content: center;
-   font-size: 1rem;
-   color: white;
-   margin-top: 1.5rem;
-   flex-shrink: 0;
+   gap: 0.5rem;
 `
 
-const SubmitButton = styled.button`
+const IconWrapper = styled.span`
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 20px;
+   height: 20px;
+   color: #ff6b6b;
+   font-size: 0.9rem;
+`
+
+const InputContainer = styled.div`
+   position: relative;
+`
+
+const InputField = styled.input`
    width: 100%;
-   padding: 1rem 2rem;
+   padding: 1.25rem 1.5rem;
+   border: 2px solid #e5e7eb;
+   border-radius: 16px;
+   font-size: 1rem;
+   transition: all 0.3s ease;
+   background: #fafbfc;
+   box-sizing: border-box;
+
+   &:focus {
+      outline: none;
+      border-color: #ff6b6b;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+      transform: translateY(-1px);
+   }
+
+   &::placeholder {
+      color: #9ca3af;
+      font-size: 0.95rem;
+   }
+
+   ${(props) =>
+      props.$error &&
+      `
+      border-color: #ef4444;
+      background: #fef2f2;
+      &:focus {
+         border-color: #ef4444;
+         box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+      }
+   `}
+`
+
+const TextAreaField = styled.textarea`
+   width: 100%;
+   padding: 1.25rem 1.5rem;
+   border: 2px solid #e5e7eb;
+   border-radius: 16px;
+   font-size: 1rem;
+   transition: all 0.3s ease;
+   background: #fafbfc;
+   resize: vertical;
+   min-height: 150px;
+   font-family: inherit;
+   line-height: 1.6;
+   box-sizing: border-box;
+
+   &:focus {
+      outline: none;
+      border-color: #ff6b6b;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+      transform: translateY(-1px);
+   }
+
+   &::placeholder {
+      color: #9ca3af;
+      font-size: 0.95rem;
+   }
+
+   ${(props) =>
+      props.$error &&
+      `
+      border-color: #ef4444;
+      background: #fef2f2;
+      &:focus {
+         border-color: #ef4444;
+         box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+      }
+   `}
+`
+
+const ErrorMessage = styled.span`
+   color: #ef4444;
+   font-size: 0.875rem;
+   margin-top: 0.75rem;
+   display: block;
+   font-weight: 500;
+`
+
+const Input = ({ label, error, icon, ...props }) => (
+   <InputWrapper>
+      {label && (
+         <InputLabel>
+            {icon && <IconWrapper>{icon}</IconWrapper>}
+            {label}
+         </InputLabel>
+      )}
+      <InputContainer>
+         <InputField $error={error} {...props} />
+      </InputContainer>
+      {error && <ErrorMessage>{error.message}</ErrorMessage>}
+   </InputWrapper>
+)
+
+const TextArea = ({ label, error, ...props }) => (
+   <InputWrapper>
+      {label && (
+         <InputLabel>
+            <IconWrapper>
+               <FaPen />
+            </IconWrapper>
+            {label}
+         </InputLabel>
+      )}
+      <InputContainer>
+         <TextAreaField $error={error} {...props} />
+      </InputContainer>
+      {error && <ErrorMessage>{error.message}</ErrorMessage>}
+   </InputWrapper>
+)
+
+const SubmitButton = styled(motion.button)`
+   padding: 1.25rem 3rem;
    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
    color: white;
    border: none;
@@ -245,16 +391,40 @@ const SubmitButton = styled.button`
    display: flex;
    align-items: center;
    justify-content: center;
-   margin-top: 1rem;
-   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+   gap: 0.5rem;
+   box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+   position: relative;
+   overflow: hidden;
+   min-width: 200px;
+
+   &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+   }
 
    &:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+      transform: translateY(-3px);
+
+      &::before {
+         left: 100%;
+      }
+   }
+
+   &:active:not(:disabled) {
+      transform: translateY(-1px);
    }
 
    &:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
    }
 `

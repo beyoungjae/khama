@@ -8,7 +8,7 @@ export function ContactModalContent() {
             궁금한 점이 있으시면 아래 이메일로 문의해주세요. <br />
             최대한 빠른 시일 내에 답변드리겠습니다.
          </Description>
-         <EmailLink href="mailto:contact@khama.or.kr">contact@khama.or.kr</EmailLink>
+         <EmailLink href="mailto:haan@hanallcompany.com">haan@hanallcompany.com</EmailLink>
       </ContentWrapper>
    )
 }

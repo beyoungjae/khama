@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
 import { FaCertificate, FaFlask, FaLeaf, FaShieldAlt, FaCheckCircle, FaIndustry, FaClipboardList, FaUsers, FaAward } from 'react-icons/fa'
 import { useInView } from 'react-intersection-observer'
-import { getImageUrl, getOptimizedImageProps, handleImageError, getLazyLoadingProps } from '../../../utils/imageHelpers'
+import { getImageUrl, getOptimizedImageProps } from '../../../utils/imageHelpers'
 import {
    fadeInScale,
    staggerContainer,
@@ -299,21 +299,27 @@ export function ProductCertPage() {
                         <StandardsTitle>품질 인증 기준</StandardsTitle>
                         <StandardsList>
                            <StandardsItem>
-                              <StandardsItemIcon><FaShieldAlt /></StandardsItemIcon>
+                              <StandardsItemIcon>
+                                 <FaShieldAlt />
+                              </StandardsItemIcon>
                               <div>
                                  <h4>안전성 검증</h4>
                                  <p>사용자 안전을 위한 철저한 안전성 시험 및 검증</p>
                               </div>
                            </StandardsItem>
                            <StandardsItem>
-                              <StandardsItemIcon><FaLeaf /></StandardsItemIcon>
+                              <StandardsItemIcon>
+                                 <FaLeaf />
+                              </StandardsItemIcon>
                               <div>
                                  <h4>환경 친화성</h4>
                                  <p>친환경 소재 사용 및 환경 영향 최소화 확인</p>
                               </div>
                            </StandardsItem>
                            <StandardsItem>
-                              <StandardsItemIcon><FaAward /></StandardsItemIcon>
+                              <StandardsItemIcon>
+                                 <FaAward />
+                              </StandardsItemIcon>
                               <div>
                                  <h4>성능 우수성</h4>
                                  <p>동급 제품 대비 뛰어난 성능과 내구성 입증</p>
@@ -321,7 +327,7 @@ export function ProductCertPage() {
                            </StandardsItem>
                         </StandardsList>
                      </StandardsTextCard>
-                     
+
                      <StandardsImageCard as={motion.div} variants={fadeInScale}>
                         <ResponsiveImage {...getOptimizedImageProps(getImageUrl('association', 'building'), '인증 심사 센터', [{ width: 500 }, { width: 800 }])} />
                         <StandardsImageCaption>
