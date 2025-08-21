@@ -87,16 +87,19 @@ export const PLACEHOLDER_IMAGES = {
  * @param {string} name - 이미지 이름
  * @returns {string} 이미지 URL
  */
+
+// ✅ Vite가 실제 존재하는 이미지 파일만 매핑(빌드/런타임 모두)
+const IMAGE_MAP = import.meta.glob('../assets/images/**/*', { as: 'url', eager: true })
+
 export const getImageUrl = (category, name) => {
    try {
-      // 로컬 이미지 우선 사용
-      try {
-         return new URL(`../assets/images/${category}/${name}`, import.meta.url).href
-      } catch {
-         // 로컬 이미지가 없는 경우 placeholder 사용
+      // 1) 로컬 존재 파일만 반환 (404 방지)
+      const relPath = `../assets/images/${category}/${name}`
+      if (IMAGE_MAP[relPath]) {
+         return IMAGE_MAP[relPath] // 실제 파일만 URL 반환
+      } else {
          console.warn(`Local image not found: ${category}/${name}, using placeholder`)
       }
-
       // Placeholder 이미지 사용
       const categoryImages = PLACEHOLDER_IMAGES[category]
       if (!categoryImages) {
@@ -162,6 +165,9 @@ export const generateSrcSet = (baseUrl, sizes = []) => {
  * @returns {Object} 최적화된 이미지 속성
  */
 export const getOptimizedImageProps = (src, alt, sizes = [], options = {}) => {
+   if (!src) {
+      src = PLACEHOLDER_IMAGES.common.notice
+   }
    const { useWebP = true, eager = false, quality = 80, fallbackUrl = null } = options
 
    // 이미지 압축 및 포맷 최적화
@@ -250,9 +256,9 @@ export const getCachedImageUrl = (url) => {
    const urlObj = new URL(url)
 
    // Unsplash 이미지는 이미 최적화되어 있으므로 그대로 반환
-   if (urlObj.hostname.includes('unsplash.com')) {
-      return url
-   }
+   if (urlObj.hostname.includes('unsplash.com')) return url
+
+   if (urlObj.hostname.includes('localhost')) return url // dev 환경은 v 파라미터 추가 X
 
    // 기타 외부 이미지는 캐시 버스팅 적용
    urlObj.searchParams.set('v', Date.now().toString())

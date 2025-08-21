@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
 import { Link } from 'react-router-dom'
-import { FaBullseye, FaWrench, FaChalkboardTeacher, FaGraduationCap, FaUsers, FaCertificate, FaTrophy, FaClock, FaCheckCircle } from 'react-icons/fa'
+import { FaGraduationCap, FaUsers, FaCertificate, FaClock, FaCheckCircle } from 'react-icons/fa'
 import { useInView } from 'react-intersection-observer'
 import { getImageUrl, getOptimizedImageProps } from '../../../utils/imageHelpers'
 import {
@@ -18,15 +18,8 @@ import {
    GradientText,
    HeroSubtitle,
    HeroDescription,
-   HeroImageContainer,
-   HeroImagePlaceholder,
    CompactSection,
    CompactGrid,
-   StatisticsSection,
-   StatisticsGrid,
-   StatNumber,
-   StatLabel,
-   StatCard,
    ZigzagSection,
    ZigzagLayout,
    ZigzagContent,
@@ -61,7 +54,7 @@ export function EducationPage() {
                      <FaGraduationCap /> 전문 교육 과정
                   </HeroBadge>
                   <HeroTitle as={motion.h1} variants={slideInLeft}>
-                     KHAMA <GradientText>교육원</GradientText>
+                     KHAMA <GradientText>협회</GradientText>
                   </HeroTitle>
                   <HeroSubtitle as={motion.p} variants={slideInRight}>
                      "이론과 실무를 겸비한 전문가 양성의 요람"
@@ -72,81 +65,10 @@ export function EducationPage() {
                      생활가전 유지보수 전문가로 성장할 기회를 제공합니다
                   </HeroDescription>
                </motion.div>
-               <HeroImageContainer as={motion.div} variants={slideInRight}>
-                  <HeroImagePlaceholder>
-                     <FaChalkboardTeacher size={80} />
-                     <p>전문 교육 과정</p>
-                  </HeroImagePlaceholder>
-               </HeroImageContainer>
             </HeroContainer>
          </ModernHeroSection>
 
-         {/* 🚀 1단계: 임팩트 있는 통계 섹션 */}
-         <StatisticsSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-            <Container>
-               <StatisticsGrid>
-                  <StatCard variants={fadeInScale}>
-                     <StatNumber>4</StatNumber>
-                     <StatLabel>전문 자격증 과정</StatLabel>
-                  </StatCard>
-                  <StatCard variants={fadeInScale}>
-                     <StatNumber>95%</StatNumber>
-                     <StatLabel>교육 만족도</StatLabel>
-                  </StatCard>
-                  <StatCard variants={fadeInScale}>
-                     <StatNumber>200+</StatNumber>
-                     <StatLabel>연간 교육생</StatLabel>
-                  </StatCard>
-                  <StatCard variants={fadeInScale}>
-                     <StatNumber>85%</StatNumber>
-                     <StatLabel>자격증 취득률</StatLabel>
-                  </StatCard>
-               </StatisticsGrid>
-            </Container>
-         </StatisticsSection>
-
          <Container>
-            {/* 🎯 2단계: 컴팩트한 교육 개요 */}
-            <CompactSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-               <SectionHeader>
-                  <SectionTitle as={motion.h2} variants={fadeInScale}>
-                     교육 개요
-                  </SectionTitle>
-                  <SectionSubtitle as={motion.p} variants={fadeInScale}>
-                     체계적이고 전문적인 교육 시스템으로 여러분을 전문가로 양성합니다
-                  </SectionSubtitle>
-               </SectionHeader>
-               <CompactGrid columns={3}>
-                  <Card as={motion.div} variants={fadeInScale}>
-                     <CardIcon $primary>
-                        <FaBullseye />
-                     </CardIcon>
-                     <CardContent>
-                        <CardTitle>교육 목적</CardTitle>
-                        <CardDescription>가전제품 유지보수 분야의 이론과 실무 능력을 겸비한 전문 인력 양성</CardDescription>
-                     </CardContent>
-                  </Card>
-                  <Card as={motion.div} variants={fadeInScale}>
-                     <CardIcon $secondary>
-                        <FaWrench />
-                     </CardIcon>
-                     <CardContent>
-                        <CardTitle>교육 특징</CardTitle>
-                        <CardDescription>최신 기술 동향 반영, 현장 중심 실습, 소수 정예 맞춤 교육</CardDescription>
-                     </CardContent>
-                  </Card>
-                  <Card as={motion.div} variants={fadeInScale}>
-                     <CardIcon $accent>
-                        <FaTrophy />
-                     </CardIcon>
-                     <CardContent>
-                        <CardTitle>기대 효과</CardTitle>
-                        <CardDescription>체계적 교육을 통한 전문 기술 습득과 자격증 취득으로 경쟁력 향상</CardDescription>
-                     </CardContent>
-                  </Card>
-               </CompactGrid>
-            </CompactSection>
-
             {/* 🔥 3단계: 지그재그 레이아웃으로 교육 과정 */}
             <ZigzagSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer} background="linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)">
                <SectionHeader>
@@ -243,7 +165,7 @@ export function EducationPage() {
             <CompactSection as={motion.section} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
                <SectionHeader>
                   <SectionTitle as={motion.h2} variants={fadeInScale}>
-                     KHAMA 교육원 특장점
+                     KHAMA 협회 특장점
                   </SectionTitle>
                </SectionHeader>
                <CompactGrid columns={4}>

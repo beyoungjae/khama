@@ -490,7 +490,7 @@ export function ApplianceCleaningPage() {
                               <strong>자격발급기관:</strong> 한국생활가전유지관리협회
                            </LegalItem>
                            <LegalItem>
-                              <strong>사업자등록번호:</strong> 108-82-87006
+                              <strong>사업자등록번호:</strong> 714-88-00785
                            </LegalItem>
                            <LegalItem>
                               <strong>소재지:</strong> 인천광역시 서구 청라한내로72번길 13 (청라동) 203호

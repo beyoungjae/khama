@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom' // 라우터 링�
 import { useAuth } from '@/contexts/AuthContext' // useAuth 훅 임포트
 import { useState, useEffect, useRef } from 'react' // 햄버거 메뉴 상태 관리
 import { motion, AnimatePresence } from 'framer-motion'
+import logoImg from '@/assets/images/logo.png'
 
 // 메뉴 데이터 구조화
 const menuItems = [
@@ -11,7 +12,6 @@ const menuItems = [
       path: '/association',
       subItems: [
          { name: '인사말', path: '/association/greeting' },
-         { name: '설립목적', path: '/association/purpose' },
          { name: '오시는길', path: '/association/location' },
       ],
    },
@@ -29,7 +29,6 @@ const menuItems = [
       name: '교육안내',
       path: '/education',
       subItems: [
-         { name: '교육목적', path: '/education/goal' },
          { name: '교육시설안내', path: '/education/facilities' },
          { name: '교육내용', path: '/education/content' },
          { name: '교육원소개', path: '/education/intro' },
@@ -114,8 +113,7 @@ export function Header() {
          {' '}
          {/* 컨테이너 레벨에서 이탈 감지 */}
          <Logo to="/">
-            {/* 로고 이미지 사용 고려 */}
-            KHAMA
+            <img src={logoImg} alt="KHAMA 로고" />
          </Logo>
          {/* --- 데스크탑 메뉴 --- */}
          <DesktopNavContainer onMouseEnter={handleMouseEnterMegaMenu}>
@@ -243,12 +241,21 @@ const HeaderContainer = styled(motion.header)`
 `
 
 const Logo = styled(Link)`
-   font-family: ${({ theme }) => theme.fonts.heading};
-   font-size: ${({ theme }) => theme.fontSizes.xl};
-   font-weight: bold;
-   color: ${({ theme }) => theme.colors.primary};
-   text-decoration: none;
-   flex-shrink: 0; // 로고 줄어들지 않게
+   display: flex;
+   align-items: center;
+   flex-shrink: 0;
+
+   img {
+      height: 40px; /* 헤더 높이(70px)에 맞게 세로 크기 조정 */
+      width: auto; /* 비율 유지 */
+      object-fit: contain;
+   }
+
+   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+      img {
+         height: 32px; /* 모바일에서 조금 작게 */
+      }
+   }
 `
 
 const DesktopNavContainer = styled.nav`

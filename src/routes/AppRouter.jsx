@@ -2,10 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { HomePage } from '@/features/home/pages/HomePage'
 import { AssociationPage } from '@/features/association/pages/AssociationPage'
 import { GreetingPage } from '@/features/association/pages/GreetingPage'
-import { PurposePage } from '@/features/association/pages/PurposePage'
 import { LocationPage } from '@/features/association/pages/LocationPage'
 import { EducationPage } from '@/features/education/pages/EducationPage'
-import { EducationGoalPage } from '@/features/education/pages/EducationGoalPage'
 import { EducationFacilitiesPage } from '@/features/education/pages/EducationFacilitiesPage'
 import { EducationContentPage } from '@/features/education/pages/EducationContentPage'
 import { EducationIntroPage } from '@/features/education/pages/EducationIntroPage'
@@ -66,10 +64,8 @@ export function AppRouter() {
          <Route path="/" element={<HomePage />} />
          <Route path="/association" element={<AssociationPage />} />
          <Route path="/association/greeting" element={<GreetingPage />} />
-         <Route path="/association/purpose" element={<PurposePage />} />
          <Route path="/association/location" element={<LocationPage />} />
          <Route path="/education" element={<EducationPage />} />
-         <Route path="/education/goal" element={<EducationGoalPage />} />
          <Route path="/education/facilities" element={<EducationFacilitiesPage />} />
          <Route path="/education/content" element={<EducationContentPage />} />
          <Route path="/education/intro" element={<EducationIntroPage />} />

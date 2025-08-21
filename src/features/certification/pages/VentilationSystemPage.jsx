@@ -323,64 +323,39 @@ export function VentilationSystemPage() {
                   steps={[
                      {
                         icon: <FaSearch />,
-                        title: "현장 조사 및 공기질 진단",
-                        description: "실내 공기질 측정과 환경 분석을 통한 최적 시스템 설계",
-                        details: [
-                           "전문 장비를 이용한 공기질 측정",
-                           "포름알데히드, VOCs 등 유해물질 농도 분석",
-                           "실내 구조 및 환기 필요 면적 측정",
-                           "기존 환기시설 성능 평가"
-                        ],
-                        badge: "진단 단계"
+                        title: '현장 조사 및 공기질 진단',
+                        description: '실내 공기질 측정과 환경 분석을 통한 최적 시스템 설계',
+                        details: ['전문 장비를 이용한 공기질 측정', '포름알데히드, VOCs 등 유해물질 농도 분석', '실내 구조 및 환기 필요 면적 측정', '기존 환기시설 성능 평가'],
+                        badge: '진단 단계',
                      },
                      {
                         icon: <FaCogs />,
-                        title: "맞춤형 시스템 설계",
-                        description: "건물 특성과 공기질 상태에 맞는 최적 환기청정시스템 설계",
-                        details: [
-                           "실내 용적 및 환기량 계산",
-                           "필터 타입 및 용량 선정",
-                           "덕트 경로 및 배치 설계",
-                           "에너지 효율성 최적화 계획"
-                        ],
-                        badge: "설계 단계"
+                        title: '맞춤형 시스템 설계',
+                        description: '건물 특성과 공기질 상태에 맞는 최적 환기청정시스템 설계',
+                        details: ['실내 용적 및 환기량 계산', '필터 타입 및 용량 선정', '덕트 경로 및 배치 설계', '에너지 효율성 최적화 계획'],
+                        badge: '설계 단계',
                      },
                      {
                         icon: <FaTools />,
-                        title: "시스템 설치 및 배관",
-                        description: "전문 기술을 바탕으로 한 정밀한 환기청정시스템 설치 작업",
-                        details: [
-                           "환기팬 및 공기청정기 설치",
-                           "덕트 배관 및 연결 작업",
-                           "센서 및 제어시스템 설치",
-                           "안전 점검 및 누설 테스트"
-                        ],
-                        badge: "시공 단계"
+                        title: '시스템 설치 및 배관',
+                        description: '전문 기술을 바탕으로 한 정밀한 환기청정시스템 설치 작업',
+                        details: ['환기팬 및 공기청정기 설치', '덕트 배관 및 연결 작업', '센서 및 제어시스템 설치', '안전 점검 및 누설 테스트'],
+                        badge: '시공 단계',
                      },
                      {
                         icon: <FaWrench />,
-                        title: "성능 테스트 및 조정",
-                        description: "설치된 시스템의 성능 확인과 최적화 작업",
-                        details: [
-                           "시스템 가동 및 성능 측정",
-                           "공기 순환량 및 정화 효율 확인",
-                           "소음 레벨 및 진동 점검",
-                           "자동 제어 시스템 동작 확인"
-                        ],
-                        badge: "테스트 단계"
+                        title: '성능 테스트 및 조정',
+                        description: '설치된 시스템의 성능 확인과 최적화 작업',
+                        details: ['시스템 가동 및 성능 측정', '공기 순환량 및 정화 효율 확인', '소음 레벨 및 진동 점검', '자동 제어 시스템 동작 확인'],
+                        badge: '테스트 단계',
                      },
                      {
                         icon: <FaCheckCircle />,
-                        title: "사후 관리 및 유지보수",
-                        description: "지속적인 공기질 관리를 위한 정기 점검 및 관리 서비스",
-                        details: [
-                           "정기적인 필터 교체 스케줄 제공",
-                           "시스템 성능 모니터링",
-                           "공기질 재측정 및 평가",
-                           "고객 교육 및 사용법 안내"
-                        ],
-                        badge: "관리 단계"
-                     }
+                        title: '사후 관리 및 유지보수',
+                        description: '지속적인 공기질 관리를 위한 정기 점검 및 관리 서비스',
+                        details: ['정기적인 필터 교체 스케줄 제공', '시스템 성능 모니터링', '공기질 재측정 및 평가', '고객 교육 및 사용법 안내'],
+                        badge: '관리 단계',
+                     },
                   ]}
                />
             </Container>
@@ -443,13 +418,7 @@ export function VentilationSystemPage() {
                   </SectionHeader>
 
                   <motion.div variants={fadeInScale}>
-                     <BeforeAfterSlider
-                        beforeImage={getImageUrl('certifications', 'ventilation/before.jpg')}
-                        afterImage={getImageUrl('certifications', 'ventilation/after.jpg')}
-                        beforeLabel="시공 전"
-                        afterLabel="시공 후"
-                        alt="환기청정시스템 시공 전후 비교"
-                     />
+                     <BeforeAfterSlider beforeImage={getImageUrl('certifications', 'ventilation/before.jpg')} afterImage={getImageUrl('certifications', 'ventilation/after.jpg')} beforeLabel="시공 전" afterLabel="시공 후" alt="환기청정시스템 시공 전후 비교" />
                   </motion.div>
                </motion.div>
             </Container>
@@ -703,7 +672,7 @@ export function VentilationSystemPage() {
                               <strong>자격발급기관:</strong> 한국생활가전유지관리협회
                            </LegalItem>
                            <LegalItem>
-                              <strong>사업자등록번호:</strong> 108-82-87006
+                              <strong>사업자등록번호:</strong> 714-88-00785
                            </LegalItem>
                            <LegalItem>
                               <strong>소재지:</strong> 인천광역시 서구 청라한내로72번길 13 (청라동) 203호

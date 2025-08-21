@@ -1,195 +1,125 @@
 import { motion } from 'framer-motion' // motion은 애니메이션을 위해 필수적으로 사용됨
-import { FaUser, FaHandshake, FaHeart, FaShieldAlt, FaUsers, FaLightbulb } from 'react-icons/fa'
+import { FaShieldAlt, FaUsers, FaLightbulb } from 'react-icons/fa'
 import { useInView } from 'react-intersection-observer'
-import { getImageUrl, getOptimizedImageProps, handleImageError, getLazyLoadingProps } from '../../../utils/imageHelpers'
-import {
-   fadeInScale,
-   staggerContainer,
-   slideInLeft,
-   PageWrapper,
-   Container,
-   ModernHeroSection,
-   HeroBackground,
-   HeroContainer,
-   HeroBadge,
-   HeroTitle,
-   GradientText,
-   HeroSubtitle,
-   HeroDescription,
-   HeroImageContainer,
-   HeroImagePlaceholder,
-   SectionHeader,
-   SectionTitle,
-   SectionSubtitle,
-   Card,
-   CardIcon,
-   CardContent,
-   CardTitle,
-   CardDescription,
-   PersonCard,
-   PersonImage,
-   PersonName,
-   PersonRole,
-   PersonDescription,
-   HeroImageSection,
-   Section,
-   Grid,
-   ImageGallery,
-   ImageGalleryItem,
-   ImageCaption,
-   ResponsiveImage,
-} from '../../../components/common/SharedStyles'
+import { getImageUrl, handleImageError, getLazyLoadingProps } from '../../../utils/imageHelpers'
+import { fadeInScale, staggerContainer, PageWrapper, Container, SectionHeader, SectionTitle, SectionSubtitle } from '../../../components/common/SharedStyles'
 import styled from 'styled-components'
 
 export function GreetingPage() {
    // motion 컴포넌트 사용을 위한 필수 import 보장
    const MotionDiv = motion.div
 
-   const { ref: heroRef, inView: heroInView } = useInView({ triggerOnce: true, threshold: 0.1 })
    const { ref: greetingRef, inView: greetingInView } = useInView({ triggerOnce: true, threshold: 0.2 })
    const { ref: valuesRef, inView: valuesInView } = useInView({ triggerOnce: true, threshold: 0.2 })
 
    return (
       <PageWrapper>
-         {/* Hero Section - 현대적 디자인 */}
-         <ModernHeroSection ref={heroRef} bgImage={getImageUrl('association', 'president.jpg')}>
-            <HeroBackground radialGradient="radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)" />
-            <HeroContainer>
-               <motion.div initial="hidden" animate={heroInView ? 'visible' : 'hidden'} variants={slideInLeft}>
-                  <HeroBadge>
-                     <FaHandshake />
-                     <span>회장 인사말</span>
-                  </HeroBadge>
-                  <HeroTitle>
-                     한국생활가전유지관리협회
-                     <br />
-                     <GradientText>방문을 환영합니다</GradientText>
-                  </HeroTitle>
-                  <HeroSubtitle>Korea Household Appliances Maintenance Association</HeroSubtitle>
-                  <HeroDescription>생활가전 유지보수 분야의 기술 표준을 정립하고, 전문 인력 양성을 통해 국민의 안전과 편익 증진에 기여합니다</HeroDescription>
-               </motion.div>
-               <HeroImageContainer>
-                  <HeroImagePlaceholder>
-                     <FaUser size={80} />
-                     <FaHandshake size={60} />
-                     <FaHeart size={70} />
-                     <p>회장 인사말</p>
-                  </HeroImagePlaceholder>
-               </HeroImageContainer>
-            </HeroContainer>
-         </ModernHeroSection>
-
-         {/* 회장 인사말 섹션 */}
+         {/* 회장 인사말 섹션 (리디자인) */}
          <GreetingSection ref={greetingRef}>
             <Container>
                <motion.div initial="hidden" animate={greetingInView ? 'visible' : 'hidden'} variants={staggerContainer}>
                   <SectionHeader>
                      <SectionTitle>회장 인사말</SectionTitle>
-                     <SectionSubtitle>한국생활가전유지관리협회 회장의 인사말씀을 전해드립니다</SectionSubtitle>
+                     <SectionSubtitle>한국생활가전유지관리협회 회장의 메시지</SectionSubtitle>
                   </SectionHeader>
 
-                  <GreetingContent>
-                     <PersonCard as={motion.div} variants={fadeInScale}>
-                        <PersonImage src={getImageUrl('association', 'president')} alt="KHAMA 협회장" onError={handleImageError} {...getLazyLoadingProps()} />
-                        <PersonName>김윤채</PersonName>
-                        <PersonRole>한국생활가전유지관리협회 회장</PersonRole>
-                        <PersonDescription>생활가전 산업 발전과 전문 인력 양성을 통해 국민의 안전과 편익 증진에 기여</PersonDescription>
-                     </PersonCard>
+                  <GreetingHero>
+                     {/* 좌측: 사진 */}
+                     <PhotoWrap as={motion.div} variants={fadeInScale}>
+                        <div className="frame">
+                           <img src={getImageUrl('association', 'president')} alt="KHAMA 협회장" onError={handleImageError} {...getLazyLoadingProps()} draggable={false} />
+                           <span className="ring" aria-hidden />
+                           <span className="shine" aria-hidden />
+                        </div>
+                        <PhotoCaption>
+                           <strong>김윤채</strong>
+                           <span>한국생활가전유지관리협회 회장</span>
+                        </PhotoCaption>
+                     </PhotoWrap>
 
-                     <GreetingMessageCard variants={fadeInScale}>
-                        <GreetingMessage>
-                           <MessageParagraph>안녕하십니까, 한국생활가전유지관리협회 회장 김윤채입니다.</MessageParagraph>
-                           <MessageParagraph>급변하는 기술 환경 속에서 생활가전 제품은 우리 삶의 필수적인 부분이 되었습니다. 이러한 가전제품을 안전하고 효율적으로 유지 관리하는 전문가의 역할은 그 어느 때보다 중요해지고 있습니다.</MessageParagraph>
-                           <MessageParagraph>우리 협회는 생활가전 유지보수 분야의 기술 표준을 정립하고, 전문 인력 양성을 통해 국민의 안전과 편익 증진에 기여하고자 설립되었습니다. 또한, 관련 산업의 건전한 발전과 회원 상호 간의 교류 협력을 도모하고 있습니다.</MessageParagraph>
-                           <MessageParagraph>앞으로도 협회는 투명하고 공정한 운영을 바탕으로 회원 여러분의 권익 보호와 전문성 향상을 위해 최선을 다할 것을 약속드립니다. 많은 관심과 참여 부탁드립니다.</MessageParagraph>
-                           <MessageParagraph>감사합니다.</MessageParagraph>
-                        </GreetingMessage>
-                        <Signature>한국생활가전유지관리협회 회장 김윤채 드림</Signature>
-                     </GreetingMessageCard>
-                  </GreetingContent>
+                     {/* 우측: 메시지 */}
+                     <MessageWrap as={motion.div} variants={fadeInScale}>
+                        <Ribbon>Message from the President</Ribbon>
+
+                        <Lead>
+                           안녕하십니까, 한국생활가전유지관리협회 회장 <strong>김윤채</strong>입니다.
+                        </Lead>
+
+                        <PullQuote>
+                           생활가전 유지관리는 <br /> ‘안전’과 ‘신뢰’의 산업입니다. <br />
+                           KHAMA는 표준과 교육으로 <br /> 그 신뢰를 설계합니다.
+                        </PullQuote>
+
+                        <MessageBody>
+                           <p>
+                              급변하는 기술 환경 속에서 <br />
+                              생활가전 제품은 우리 삶의 필수 인프라가 되었습니다. <br /> 이러한 제품을 <em>안전하고 효율적으로 유지관리</em>하는 <br />
+                              전문 인력의 역할은 어느 때보다 중요해지고 있습니다.
+                           </p>
+                           <p>
+                              우리 협회는 유지관리 <strong>기술 표준</strong>을 정립하고, <br /> 체계적 <strong>교육·자격</strong>을 통해 전문가를 양성합니다. <br />
+                              <br /> 더 나아가 산업의 건전한 발전과 회원 상호 협력을 촉진하여 <br />
+                              국민의 생활 안전과 편익 증진에 기여하겠습니다.
+                           </p>
+                           <p>
+                              앞으로도 투명하고 공정한 운영으로 회원의 권익을 보호하고, <br /> 업계의 신뢰를 이끄는 협회가 되겠습니다. <br />
+                              많은 관심과 참여 부탁드립니다.
+                           </p>
+                        </MessageBody>
+
+                        <SignatureBlock>
+                           <span className="name">한국생활가전유지관리협회 회장</span>
+                           <span className="sign">김윤채</span>
+                        </SignatureBlock>
+
+                        <KeyBadges>
+                           <li>표준화</li>
+                           <li>전문성</li>
+                           <li>투명경영</li>
+                        </KeyBadges>
+                     </MessageWrap>
+                  </GreetingHero>
                </motion.div>
             </Container>
          </GreetingSection>
 
-         {/* 협회 가치 섹션 */}
+         {/* 협회 가치 섹션 (리디자인) */}
          <ValuesSection ref={valuesRef}>
             <Container>
                <motion.div initial="hidden" animate={valuesInView ? 'visible' : 'hidden'} variants={staggerContainer}>
                   <SectionHeader>
                      <SectionTitle>협회의 핵심 가치</SectionTitle>
-                     <SectionSubtitle>우리가 추구하는 가치와 비전을 소개합니다</SectionSubtitle>
+                     <SectionSubtitle>우리가 지키는 원칙과 기준</SectionSubtitle>
                   </SectionHeader>
 
-                  <ValuesGrid>
-                     <Card variants={fadeInScale}>
-                        <CardIcon primary>
+                  <ValueRow>
+                     <ValueTile as={motion.div} variants={fadeInScale}>
+                        <ValueIcon className="pink">
                            <FaShieldAlt />
-                        </CardIcon>
-                        <CardContent>
-                           <CardTitle>안전</CardTitle>
-                           <CardDescription>국민의 안전한 생활환경 조성을 위해 최고 수준의 기술 표준을 제공합니다</CardDescription>
-                        </CardContent>
-                     </Card>
+                        </ValueIcon>
+                        <h4>안전</h4>
+                        <p>국민의 안전을 최우선으로, 최고 수준의 유지관리 표준을 제공합니다.</p>
+                     </ValueTile>
 
-                     <Card variants={fadeInScale}>
-                        <CardIcon secondary>
+                     <ValueTile as={motion.div} variants={fadeInScale}>
+                        <ValueIcon className="blue">
                            <FaUsers />
-                        </CardIcon>
-                        <CardContent>
-                           <CardTitle>전문성</CardTitle>
-                           <CardDescription>체계적인 교육과 자격 인증을 통해 전문가를 양성합니다</CardDescription>
-                        </CardContent>
-                     </Card>
+                        </ValueIcon>
+                        <h4>전문성</h4>
+                        <p>체계적 교육과 자격 인증으로 신뢰받는 전문가를 양성합니다.</p>
+                     </ValueTile>
 
-                     <Card variants={fadeInScale}>
-                        <CardIcon accent>
+                     <ValueTile as={motion.div} variants={fadeInScale}>
+                        <ValueIcon className="amber">
                            <FaLightbulb />
-                        </CardIcon>
-                        <CardContent>
-                           <CardTitle>혁신</CardTitle>
-                           <CardDescription>지속적인 기술 개발과 표준화를 통해 산업 발전을 선도합니다</CardDescription>
-                        </CardContent>
-                     </Card>
-                  </ValuesGrid>
+                        </ValueIcon>
+                        <h4>혁신</h4>
+                        <p>지속적인 기술 개발과 표준화로 산업의 미래를 선도합니다.</p>
+                     </ValueTile>
+                  </ValueRow>
                </motion.div>
             </Container>
          </ValuesSection>
-
-         {/* 협회 활동 이미지 갤러리 */}
-         <Section>
-            <Container>
-               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
-                  <SectionHeader>
-                     <SectionTitle>협회 주요 활동</SectionTitle>
-                     <SectionSubtitle>KHAMA의 다양한 활동과 성과를 통해 협회의 비전을 확인하세요</SectionSubtitle>
-                  </SectionHeader>
-
-                  <ImageGallery>
-                     <ImageGalleryItem as={motion.div} variants={fadeInScale}>
-                        <ResponsiveImage {...getOptimizedImageProps(getImageUrl('association', 'meeting'), '협회 정기 회의', [{ width: 400 }, { width: 800 }])} />
-                        <ImageCaption>
-                           <h4>정기 이사회</h4>
-                           <p>투명하고 민주적인 의사결정을 통한 협회 운영</p>
-                        </ImageCaption>
-                     </ImageGalleryItem>
-                     <ImageGalleryItem as={motion.div} variants={fadeInScale}>
-                        <ResponsiveImage {...getOptimizedImageProps(getImageUrl('association', 'event'), '협회 행사', [{ width: 400 }, { width: 800 }])} />
-                        <ImageCaption>
-                           <h4>협회 행사</h4>
-                           <p>회원들과 함께하는 소통과 화합의 시간</p>
-                        </ImageCaption>
-                     </ImageGalleryItem>
-                     <ImageGalleryItem as={motion.div} variants={fadeInScale}>
-                        <ResponsiveImage {...getOptimizedImageProps(getImageUrl('association', 'building'), '협회 건물', [{ width: 400 }, { width: 800 }])} />
-                        <ImageCaption>
-                           <h4>협회 본부</h4>
-                           <p>전문적이고 체계적인 업무 환경</p>
-                        </ImageCaption>
-                     </ImageGalleryItem>
-                  </ImageGallery>
-               </motion.div>
-            </Container>
-         </Section>
       </PageWrapper>
    )
 }
@@ -200,98 +130,291 @@ const GreetingSection = styled.section`
    background: white;
 `
 
-const GreetingContent = styled.div`
-   display: grid;
-   grid-template-columns: 1fr 2fr;
-   gap: 4rem;
-   align-items: start;
-
-   @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-   }
-`
-
-const PresidentImageCard = styled(motion.div)`
-   background: white;
-   border-radius: 20px;
-   padding: 2.5rem;
-   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-   border: 1px solid #e2e8f0;
-   text-align: center;
-   position: sticky;
-   top: 2rem;
-`
-
-const PresidentImage = styled.div`
-   width: 150px;
-   height: 150px;
-   border-radius: 50%;
-   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-size: 3rem;
-   color: white;
-   margin: 0 auto 1.5rem;
-   box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
-`
-
-const PresidentName = styled.h3`
-   font-size: 1.5rem;
-   font-weight: 700;
-   color: #1e293b;
-   margin-bottom: 0.5rem;
-`
-
-const PresidentTitle = styled.p`
-   color: #64748b;
-   font-size: 1rem;
-   font-weight: 500;
-`
-
-const GreetingMessageCard = styled(motion.div)`
-   background: white;
-   border-radius: 20px;
-   padding: 3rem;
-   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-   border: 1px solid #e2e8f0;
-`
-
-const GreetingMessage = styled.div`
-   margin-bottom: 2rem;
-`
-
-const MessageParagraph = styled.p`
-   font-size: 1.1rem;
-   line-height: 1.8;
-   color: #374151;
-   margin-bottom: 1.5rem;
-   text-align: justify;
-
-   &:first-child {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #1e40af;
-   }
-`
-
-const Signature = styled.div`
-   text-align: right;
-   font-size: 1.1rem;
-   font-weight: 600;
-   color: #1e40af;
-   padding-top: 2rem;
-   border-top: 2px solid #e2e8f0;
-`
-
 const ValuesSection = styled.section`
    padding: 6rem 0;
    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 `
 
-const ValuesGrid = styled.div`
+/* ===== Greeting Redesign ===== */
+const GreetingHero = styled.div`
    display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-   gap: 2rem;
+   grid-template-columns: 420px 1fr;
+   gap: 3rem;
+   align-items: start;
+
+   @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+   }
+`
+
+const PhotoWrap = styled.div`
+   .frame {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.35));
+   }
+   img {
+      display: block;
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      user-select: none;
+   }
+   .ring {
+      position: absolute;
+      inset: -2px;
+      border-radius: 24px;
+      background: radial-gradient(1200px 300px at -10% 10%, rgba(255, 107, 107, 0.35), transparent 40%), radial-gradient(900px 300px at 110% 80%, rgba(59, 130, 246, 0.25), transparent 40%);
+      pointer-events: none;
+   }
+   .shine {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.25) 35%, transparent 70%);
+      mix-blend-mode: screen;
+      transform: translateX(-40%);
+      animation: sweep 4s ease-in-out infinite;
+   }
+   @keyframes sweep {
+      0% {
+         transform: translateX(-60%);
+         opacity: 0;
+      }
+      35% {
+         opacity: 0.85;
+      }
+      60% {
+         transform: translateX(60%);
+         opacity: 0;
+      }
+      100% {
+         transform: translateX(60%);
+         opacity: 0;
+      }
+   }
+`
+
+const PhotoCaption = styled.div`
+   margin-top: 0.9rem;
+   display: flex;
+   flex-direction: column;
+   gap: 0.2rem;
+   strong {
+      font-size: 1.2rem;
+      color: #0f172a;
+   }
+   span {
+      color: #64748b;
+      font-size: 0.95rem;
+   }
+`
+
+const MessageWrap = styled(motion.div)`
+   position: relative;
+   background: rgba(255, 255, 255, 0.85);
+   border: 1px solid #e6edf5;
+   border-radius: 22px;
+   padding: 2rem 2rem 1.75rem;
+   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+   backdrop-filter: blur(8px);
+`
+
+const Ribbon = styled.div`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.45rem 0.8rem;
+   font-weight: 800;
+   font-size: 0.78rem;
+   letter-spacing: 0.06em;
+   color: #b91c1c;
+   background: #fff0f0;
+   border: 1px solid #ffd5d5;
+   border-radius: 999px;
+   margin-bottom: 1rem;
+
+   &:before {
+      content: '•';
+      color: #ef4444;
+      font-weight: 900;
+   }
+`
+
+const Lead = styled.p`
+   margin: 0 0 0.8rem 0;
+   font-size: 1.1rem;
+   color: #334155;
+   strong {
+      color: #0f172a;
+   }
+`
+
+const PullQuote = styled.blockquote`
+   margin: 0.6rem 0 1.1rem;
+   padding: 2rem 1.6rem;
+   background: linear-gradient(180deg, #fff, #fbfbff);
+   border: 1px dashed #e6eaf5;
+   border-radius: 14px;
+   color: #0f172a;
+   font-weight: 700;
+   line-height: 1.55;
+   position: relative;
+   text-align: center;
+
+   &:before {
+      content: '“';
+      position: absolute;
+      left: 0.6rem;
+      top: 0.3rem;
+      font-size: 2rem;
+      color: #94a3b8;
+      opacity: 0.4;
+   }
+   &:after {
+      content: '”';
+      position: absolute;
+      right: 0.6rem;
+      bottom: 0.1rem;
+      font-size: 2rem;
+      color: #94a3b8;
+      opacity: 0.4;
+   }
+`
+
+const MessageBody = styled.div`
+   p {
+      margin: 0 0 0.9rem 0;
+      color: #475569;
+      line-height: 1.75;
+      font-size: 1rem;
+      em {
+         font-style: normal;
+         color: #0f172a;
+         font-weight: 600;
+      }
+      strong {
+         color: #0f172a;
+      }
+   }
+`
+
+const SignatureBlock = styled.div`
+   margin-top: 1.2rem;
+   padding-top: 1rem;
+   border-top: 2px solid #eef2f7;
+   display: flex;
+   gap: 0.6rem;
+   align-items: baseline;
+   justify-content: flex-end;
+
+   .name {
+      color: #64748b;
+      font-weight: 600;
+   }
+   .sign {
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 1.1rem;
+   }
+`
+
+const KeyBadges = styled.ul`
+   margin: 0.8rem 0 0;
+   padding: 0;
+   list-style: none;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+
+   li {
+      padding: 0.35rem 0.7rem;
+      border: 1px solid #e8eef6;
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+      border-radius: 999px;
+      font-size: 0.78rem;
+   }
+`
+
+/* ===== Values Redesign ===== */
+const ValueRow = styled.div`
+   display: grid;
+   grid-template-columns: repeat(3, minmax(220px, 1fr));
+   gap: 1.25rem;
+
+   @media (max-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+   }
+   @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+   }
+`
+
+const ValueTile = styled(motion.div)`
+   position: relative;
+   overflow: hidden;
+   border-radius: 18px;
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.8));
+   border: 1px solid #e6edf5;
+   padding: 1.25rem 1.25rem 1.15rem;
+   box-shadow: 0 20px 44px rgba(15, 23, 42, 0.08);
+   transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+   &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 32px 64px rgba(15, 23, 42, 0.12);
+   }
+
+   h4 {
+      margin: 0.25rem 0 0.35rem 0;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #0f172a;
+   }
+   p {
+      margin: 0;
+      color: #475569;
+      line-height: 1.65;
+      font-size: 0.98rem;
+   }
+
+   /* 은은한 배경 장식 */
+   &:after {
+      content: '';
+      position: absolute;
+      right: -20%;
+      top: -20%;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(closest-side, rgba(255, 107, 107, 0.1), transparent 70%);
+      filter: blur(8px);
+      pointer-events: none;
+   }
+`
+
+const ValueIcon = styled.div`
+   width: 42px;
+   height: 42px;
+   border-radius: 12px;
+   display: grid;
+   place-items: center;
+   color: #fff;
+   font-size: 1.1rem;
+   border: 1px solid rgba(255, 255, 255, 0.25);
+   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+   margin-bottom: 0.6rem;
+
+   &.pink {
+      background: linear-gradient(135deg, #fb7185, #ef4444);
+   }
+   &.blue {
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+   }
+   &.amber {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+   }
 `

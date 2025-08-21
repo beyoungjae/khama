@@ -64,7 +64,6 @@ export const GlobalStyle = createGlobalStyle`
 
     &:hover {
       color: ${({ theme }) => theme.colors.secondary};
-      text-decoration: underline;
     }
   }
 
@@ -97,5 +96,5 @@ export const GlobalStyle = createGlobalStyle`
     height: auto;
   }
 
-  /* 필요에 따라 추가 전역 스타일 */
+  .has-shine:hover .shine { transform: translateX(120%); }
 `

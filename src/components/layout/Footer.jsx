@@ -39,7 +39,7 @@ export function Footer() {
                <ContactInfo>
                   <p>주소: 인천광역시 서구 청라한내로72번길 13 (청라동) 203호</p>
                   <p>대표번호: 1566-3321</p>
-                  <p>사업자등록번호: 108-82-87006</p>
+                  <p>사업자등록번호: 714-88-00785</p>
                   <p>대표자명: 김윤채</p>
                   <p>이메일: haan@hanallcompany.com</p>
                </ContactInfo>
@@ -50,7 +50,7 @@ export function Footer() {
                </SocialLinks> */}
             </FooterSection>
          </FooterContent>
-         <LegalNotice>본 협회에서 발급하는 자격증은 자격기본법에 따른 등록민간자격으로, 국가공인자격이 아닙니다. 민간자격 관련 상세정보는 민간자격정보서비스(www.pqi.or.kr)를 참고하시기 바랍니다.</LegalNotice>
+         <LegalNotice>본 협회에서 발급하는 자격증은 자격기본법에 따른 등록민간자격으로, 민간자격 관련 상세정보는 민간자격정보서비스(www.pqi.or.kr)를 참고하시기 바랍니다.</LegalNotice>
          <Copyright>© {new Date().getFullYear()} KHAMA (한국생활가전유지관리협회). All rights reserved.</Copyright>
       </FooterContainer>
    )

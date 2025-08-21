@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { motion } from 'framer-motion'
 
 // 공통 애니메이션 variants
@@ -61,6 +61,12 @@ export const slideInRight = {
    },
 }
 
+/* 한 트랙이 자기 폭만큼(-100%) 이동하면 다음 트랙이 정확히 이어받음 */
+const scrollX = keyframes`
+  0%   { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-100%,0,0); }
+`
+
 // 공통 레이아웃 컴포넌트
 export const PageWrapper = styled.div`
    min-height: 100vh;
@@ -102,10 +108,27 @@ export const ExamSubjects = styled.div`
    margin-top: 1.5rem;
 `
 
+export const HeroBgImg = styled(motion.img)`
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover; /* 데스크톱: 꽉 채우되 잘릴 수 있음 */
+   pointer-events: none;
+   user-select: none;
+
+   /* 모바일: 원본 비율 유지, 잘림 없음 */
+   @media (max-width: 768px) {
+      object-fit: contain;
+      max-height: 60vh; /* 너무 긴 이미지 가드 */
+      background: #0f172a; /* 레터박스 배경색(원하면 변경) */
+   }
+`
+
 // 공통 Hero 섹션 스타일
 export const ModernHeroSection = styled.section`
    position: relative;
-   min-height: 80vh;
+   min-height: 50vh;
    display: flex;
    align-items: center;
    overflow: hidden;
@@ -113,7 +136,7 @@ export const ModernHeroSection = styled.section`
       if (props.bgImage) {
          return `url(${props.bgImage})`
       }
-      return props.gradient || 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)'
+      return props.gradient || '#fff'
    }};
    background-size: cover;
    background-position: center;
@@ -133,11 +156,13 @@ export const ModernHeroSection = styled.section`
    }
 `
 
-export const HeroBackground = styled.div`
+export const HeroBackground = styled(motion.div)`
    position: absolute;
    inset: 0;
    background: ${(props) => props.radialGradient || 'radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)'};
    z-index: 1;
+   pointer-events: none;
+   will-change: opacity, transform;
 `
 
 export const HeroContainer = styled.div`
@@ -935,6 +960,33 @@ export const ImageCard = styled(motion.div)`
    }
 `
 
+// 이미지 헤더 전용(데스크톱: cover + 고정비율, 모바일: contain + 원본비율)
+export const ImageHeaderCard = styled(ImageCard)`
+   border-radius: 20px 20px 0 0;
+
+   /* 데스크톱: 일정 비율 유지(16:9), 내부 이미지는 cover */
+   @media (min-width: 769px) {
+      aspect-ratio: 16 / 9;
+   }
+
+   img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 데스크톱에서 라인 정렬용 */
+      display: block;
+   }
+
+   /* 모바일: 원본 비율 유지(전체 보이게) */
+   @media (max-width: 768px) {
+      aspect-ratio: auto;
+      img {
+         height: auto; /* 원본 비율 */
+         object-fit: contain; /* 잘림 없이 전체 표시 */
+         max-height: 60vh; /* 너무 긴 이미지 보호용 가드 */
+      }
+   }
+`
+
 export const ResponsiveImage = styled.img`
    width: 100%;
    height: 100%;
@@ -962,6 +1014,13 @@ export const ImageOverlay = styled.div`
 
    ${ImageCard}:hover & {
       opacity: 1;
+   }
+
+   @media (hover: none), (pointer: coarse) {
+      opacity: 1;
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.1) 100%);
+      align-items: flex-end; /* 하단 배치가 기본이라면 */
+      padding: 1rem;
    }
 `
 
@@ -1341,7 +1400,6 @@ export const ProcessImage = styled.div`
 // 1단계: 여백 최적화 및 컴팩트 그리드
 export const CompactSection = styled.section`
    padding: 4rem 0; // 6rem에서 4rem으로 감소 (33% 절약)
-   background: ${(props) => props.background || 'white'};
 `
 
 export const CompactGrid = styled.div`
@@ -1421,10 +1479,142 @@ export const StatCard = styled(motion.div)`
    }
 `
 
+// 소프트 그라디언트 블롭(장식용)
+export const AccentBlob = styled.div`
+   position: absolute;
+   inset: 0;
+   pointer-events: none;
+   z-index: 0;
+
+   &::before {
+      content: '';
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.22;
+      ${(props) => (props.align === 'right' ? 'right:-140px;' : 'left:-140px;')}
+      top: -100px;
+      background: radial-gradient(closest-side, #ff6b6b 0%, transparent 70%);
+   }
+`
+
+// 카드 상단의 작은 라벨
+export const Kicker = styled.span`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.35rem 0.75rem;
+   font-size: 0.8rem;
+   font-weight: 700;
+   letter-spacing: 0.02em;
+   border-radius: 999px;
+   color: #be123c;
+   background: linear-gradient(135deg, #fee2e2 0%, #ffe4e6 100%);
+   border: 1px solid #fecaca;
+`
+
+// 작은 칩 리스트
+export const ChipList = styled.div`
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+   margin-top: 1rem;
+`
+export const Chip = styled.span`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.4rem;
+   padding: 0.35rem 0.6rem;
+   font-size: 0.8rem;
+   font-weight: 600;
+   color: #334155;
+   border-radius: 999px;
+   background: #f1f5f9;
+   border: 1px solid #e2e8f0;
+`
+
+export const ShineWrapper = styled.div`
+   position: relative;
+   border-radius: 20px;
+   overflow: hidden;
+   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+
+   /* 🔥 hover 되면 내부 ShineLayer가 왼쪽→오른쪽으로 슬라이드 */
+   &:hover .shine-layer {
+      transform: translateX(120%);
+   }
+`
+
+export const ShineLayer = styled.div`
+   position: absolute;
+   inset: 0;
+   pointer-events: none;
+   z-index: 1;
+   background: linear-gradient(75deg, transparent 0%, rgba(255, 255, 255, 0.18) 35%, transparent 65%);
+   transform: translateX(-120%);
+   transition: transform 0.7s ease;
+`
+
+// 이미지 위로 지나가는 샤인 레이어
+export const Shine = styled.div`
+   position: absolute;
+   inset: 0;
+   pointer-events: none;
+   z-index: 1;
+   background: linear-gradient(75deg, transparent 0%, rgba(255, 255, 255, 0.18) 35%, transparent 65%);
+   transform: translateX(-120%);
+   transition: transform 0.7s ease;
+`
+
+export const EdgeGroup = styled.div`
+   position: relative;
+   margin-bottom: 0.75rem;
+`
+
+export const EdgeKicker = styled(Kicker)`
+   margin-bottom: 1.2rem;
+   @media (max-width: 968px) {
+      margin-bottom: 1rem;
+   }
+`
+
+/* 아이콘+타이틀 칩을 유리카드처럼 만들어 이미지 가장자리로 당김 */
+export const TitleEdge = styled.div`
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   padding: 1.5rem;
+   background: rgba(255, 255, 255, 0.85);
+   border: 1px solid #ffe1e1;
+   border-radius: 14px;
+   backdrop-filter: blur(8px);
+   box-shadow: 0 8px 20px rgba(238, 90, 111, 0.15);
+
+   h4 {
+      margin: 0;
+      /* 데스크톱 최대 24px, 모바일 최소 16px로 유동 */
+      font-size: clamp(16px, 2.4vw, 24px);
+      line-height: 1.2;
+      color: #0f172a;
+   }
+
+   @media (max-width: 968px) {
+      transform: none; /* 모바일에선 안전하게 해제 */
+      gap: 0.6rem;
+      padding: 0.5rem 0.8rem;
+   }
+
+   @media (max-width: 480px) {
+      gap: 0.5rem;
+      padding: 0.45rem 0.7rem;
+   }
+`
+
 // 3단계: 지그재그 레이아웃
 export const ZigzagSection = styled.section`
    padding: 4rem 0;
-   background: ${(props) => props.background || 'white'};
 `
 
 export const ZigzagLayout = styled.div`
@@ -1657,4 +1847,235 @@ export const NoticeText = styled.div`
    color: #92400e;
    font-size: 1.1rem;
    font-weight: 600;
+`
+
+/* 유리카드 형태의 스토리 카드 */
+export const StoryCard = styled(motion.div)`
+   position: relative;
+   border-radius: 20px;
+   padding: 1.5rem 1.5rem 1.25rem;
+   background: rgba(255, 255, 255, 0.75);
+   border: 1px solid #ffe1e1;
+   backdrop-filter: blur(8px);
+   box-shadow: 0 20px 50px rgba(238, 90, 111, 0.12);
+   overflow: hidden;
+
+   &:before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(closest-side, rgba(255, 107, 107, 0.12), transparent 70%), radial-gradient(closest-side, rgba(255, 184, 108, 0.12), transparent 70%);
+      transform: rotate(8deg);
+      z-index: 0;
+   }
+`
+
+export const StoryHeader = styled.div`
+   position: relative;
+   z-index: 1;
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   margin-bottom: 0.5rem;
+`
+
+export const StoryAvatar = styled.div`
+   width: 44px;
+   height: 44px;
+   border-radius: 50%;
+   flex-shrink: 0;
+   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: 800;
+   letter-spacing: 0.02em;
+   border: 3px solid #fff;
+   box-shadow: 0 6px 16px rgba(238, 90, 111, 0.25);
+   @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+   }
+`
+
+export const StoryName = styled.div`
+   display: flex;
+   flex-direction: column;
+   strong {
+      color: #0f172a;
+      font-size: 1.1rem;
+      line-height: 1.1;
+   }
+   span {
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 0.8rem;
+   }
+`
+
+export const Quote = styled.blockquote`
+   display: flex;
+   position: relative;
+   z-index: 1;
+   margin: 0.75rem 0 1rem;
+   color: #334155;
+   line-height: 1.7;
+   padding-left: 2.25rem;
+   &:before {
+      content: '“';
+      position: absolute;
+      left: 0.25rem;
+      top: -0.25rem;
+      font-size: 2rem;
+      color: #fb7185;
+      font-weight: 900;
+      opacity: 0.6;
+   }
+`
+
+export const BulletList = styled.ul`
+   position: relative;
+   z-index: 1;
+   list-style: none;
+   padding: 0;
+   margin: 0.5rem 0 0;
+   li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #475569;
+      padding: 0.45rem 0.6rem;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 0.5rem;
+      &:before {
+         content: '✓';
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         width: 18px;
+         height: 18px;
+         border-radius: 50%;
+         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+         color: #fff;
+         font-size: 0.75rem;
+      }
+   }
+`
+
+export const StatPill = styled.span`
+   position: relative;
+   z-index: 1;
+   display: inline-flex;
+   align-items: center;
+   gap: 0.4rem;
+   padding: 0.4rem 0.65rem;
+   border-radius: 999px;
+   font-size: 0.8rem;
+   font-weight: 700;
+   color: #fff;
+   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+   box-shadow: 0 8px 18px rgba(238, 90, 111, 0.25);
+   border: 1px solid rgba(255, 255, 255, 0.4);
+`
+
+export const StatRow = styled.div`
+   position: relative;
+   z-index: 1;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+   margin-top: 0.5rem;
+`
+
+// 섹션 래퍼
+export const PartnersSection = styled.section`
+   padding: 4rem 0;
+`
+
+/* 이미지 래퍼: 기존 ShineWrapper가 있으면 그대로 사용, 없으면 간단 버전 */
+export const StoryImageWrap = styled(motion.div)`
+   position: relative;
+   border-radius: 20px;
+   overflow: hidden;
+   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+   .shine-layer {
+      transform: translateX(-120%);
+      transition: transform 0.7s ease;
+   }
+   &:hover .shine-layer {
+      transform: translateX(120%);
+   }
+`
+
+export const OneLineMarquee = styled.div`
+   --gap: clamp(0.6rem, 2vw, 1.25rem);
+   --duration: ${(p) => p.$duration || 26}s;
+
+   position: relative;
+   display: flex; /* 트랙 2개를 가로로 */
+   overflow: hidden;
+   padding: 1rem 0;
+
+   /* 양끝 페이드 */
+   mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+   -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+
+   &:hover .marquee-track {
+      animation-play-state: paused;
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+      & * {
+         animation: none !important;
+      }
+   }
+`
+
+export const MarqueeContent = styled.ul`
+   list-style: none;
+   display: flex;
+   align-items: center;
+   gap: var(--gap);
+   margin: 0;
+   padding: 0;
+
+   /* 핵심 1: 트랙이 콘텐츠 폭만큼만 */
+   width: max-content;
+   flex: 0 0 auto;
+
+   /* 핵심 2: 시접 간격 동일하게(반쪽 갭을 양끝에) */
+   padding-inline: calc(var(--gap) / 2);
+
+   /* 끊김 없는 루프 */
+   animation: ${scrollX} var(--duration) linear infinite;
+   will-change: transform;
+`
+
+/* 아이템(로고+라벨) */
+export const PartnerChip = styled.li`
+   display: inline-flex;
+   align-items: center;
+   gap: 0.6rem;
+   padding: 0.65rem 0.9rem;
+   border-radius: 14px;
+   background: white;
+   border: 1px solid #e2e8f0;
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+   white-space: nowrap;
+`
+
+export const PartnerLogoImg = styled.img`
+   height: 150px;
+   width: auto;
+   object-fit: contain;
+   display: block;
+   filter: grayscale(10%);
+   opacity: 0.95;
+
+   @media (max-width: 768px) {
+      height: 24px;
+   }
 `
